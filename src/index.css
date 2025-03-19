@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+.font-code {
+    font-family: "Source Code Pro", serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+}
+
+.font-hawk {
+    font-family: "Fahkwang", serif;
+    font-style: normal;
+}
+
+.font-exo {
+    font-family: "Exo 2", serif;
+    font-style: normal;
+}
+
+
+body {
+    height: 100%;
+    width: 100%;
+    background-color: #F1FAEE;
+    color: #2F3E46;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+
+}
+
+/* Universal Selector */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    /* Use a default font or replace with your preferred font */
+    line-height: 1.5;
+    text-decoration: none;
+    --transition: .3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    /* transition: .3s cubic-bezier(0.25, 0.8, 0.25, 1); */
+}
+
+/* html - Make sure the page takes full height */
+html {
+    height: 100%;
+    font-size: 16px;
+    /* Base font size */
+    scroll-behavior: smooth;
+    /* Smooth scrolling */
+}
+
+/* Basic reset for images and tables */
+img,
+picture,
+video,
+svg {
+    max-width: 100%;
+    display: block;
+}
