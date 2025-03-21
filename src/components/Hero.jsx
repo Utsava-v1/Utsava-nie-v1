@@ -28,7 +28,7 @@ const Hero = () => {
     }, []);
 
     return (
-        <div className="relative w-full h-[500px]">
+        <div className="relative w-full h-[400px]">
             {/* Carousel Image */}
             <div
                 className="bg-cover bg-center h-full flex justify-center items-center text-white text-center"
