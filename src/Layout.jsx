@@ -10,7 +10,7 @@ const Layout = () => {
                 <NavBar />
             </header>
 
-            <main className='min-h-[80vh] border-white'>
+            <main className='min-h-[70vh]'>
                 <Outlet />
             </main>
 

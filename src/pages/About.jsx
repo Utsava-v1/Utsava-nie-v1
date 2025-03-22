@@ -5,10 +5,10 @@ const About = () => {
         <div className="container mx-auto px-5 py-10">
             <h1 className="text-[#1D3557] text-4xl font-bold mb-5">About NIE Utsava</h1>
             <p className="text-[#2F3E46] text-lg leading-relaxed mb-5">
-                NIE Utsava is an annual celebration organized by the students and faculty of NIE Mysuru.
-                It brings together talent from all fields, including technology, arts, and culture. Our
+                NIE Utsava is an online platform designed and maintained by the student and faculty of NIE Mysuru.
+                It brings together talent from all fields, including technology, arts, and culture to meet in event organized within the institution. Our
                 goal is to create a platform for students to showcase their skills, network with peers,
-                and participate in exciting events and workshops.
+                and participate in exciting events and workshops and gain valuble real life exposure.
             </p>
             <h2 className="text-[#1D3557] text-2xl font-semibold mb-3">Our Mission</h2>
             <p className="text-[#2F3E46] text-lg leading-relaxed mb-5">

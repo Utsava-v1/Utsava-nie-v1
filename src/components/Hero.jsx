@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import "./style/Hero.css"
 
 const images = [
     'https://images.unsplash.com/photo-1522158637959-30385a09e0da?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
@@ -31,10 +32,11 @@ const Hero = () => {
         <div className="relative w-full h-[400px]">
             {/* Carousel Image */}
             <div
-                className="bg-cover bg-center h-full flex justify-center items-center text-white text-center"
+                className="bg-cover bg-center Michel h-full flex justify-center items-center text-white text-center"
                 style={{ backgroundImage: `url(${images[currentIndex]})` }}
             >
-                <h2 className="text-5xl font-bold text-shadow-lg tracking-wide">
+
+                <h2 className="text-5xl font-bold text-shadow-lg tracking-wide text-white">
                     Discover Exciting Events for Students
                 </h2>
             </div>
