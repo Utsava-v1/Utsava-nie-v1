@@ -1,0 +1,166 @@
+{
+    "faculty": [
+      {
+        "name": "Dr. Michael Anderson",
+        "designation": "Professor",
+        "department": "CSE",
+        "email": "michael.anderson@university.edu",
+        "degree": "PhD in Computer Science",
+        "college": "University of Technology",
+        "designation": "Professor"
+      },
+      {
+        "name": "Prof. Sarah Williams",
+        "designation": "Associate Professor",
+        "department": "CSE",
+        "email": "sarah.williams@university.edu",
+        "degree": "Master's in Software Engineering",
+        "college": "Tech University"
+      },
+      {
+        "name": "Dr. James Thompson",
+        "designation": "Assistant Professor",
+        "department": "ISE",
+        "email": "james.thompson@university.edu",
+        "degree": "PhD in Information Systems",
+        "college": "International Institute of Technology"
+      },
+      {
+        "name": "Prof. Laura Martin",
+        "designation": "Professor",
+        "department": "ISE",
+        "email": "laura.martin@university.edu",
+        "degree": "Master's in Electronics and Communication",
+        "college": "Global Engineering University"
+      },
+      {
+        "name": "Dr. Samuel Roberts",
+        "designation": "Assistant Professor",
+        "department": "CSE",
+        "email": "samuel.roberts@university.edu",
+        "degree": "PhD in Artificial Intelligence",
+        "college": "State Engineering College"
+      },
+      {
+        "name": "Dr. Karen Evans",
+        "designation": "Associate Professor",
+        "department": "CSE",
+        "email": "karen.evans@university.edu",
+        "degree": "PhD in Machine Learning",
+        "college": "Tech Science University"
+      },
+      {
+        "name": "Prof. Robert Harris",
+        "designation": "Professor",
+        "department": "CSE",
+        "email": "robert.harris@university.edu",
+        "degree": "Master's in Computer Networks",
+        "college": "Tech University"
+      },
+      {
+        "name": "Dr. Emily Clark",
+        "designation": "Associate Professor",
+        "department": "ISE",
+        "email": "emily.clark@university.edu",
+        "degree": "PhD in Data Science",
+        "college": "University of Knowledge"
+      },
+      {
+        "name": "Dr. William Johnson",
+        "designation": "Assistant Professor",
+        "department": "CSE",
+        "email": "william.johnson@university.edu",
+        "degree": "PhD in Cybersecurity",
+        "college": "Central University"
+      },
+      {
+        "name": "Prof. Helen Davis",
+        "designation": "Professor",
+        "department": "ISE",
+        "email": "helen.davis@university.edu",
+        "degree": "Master's in Embedded Systems",
+        "college": "National Institute of Technology"
+      },
+      {
+        "name": "Dr. David Collins",
+        "designation": "Assistant Professor",
+        "department": "CSE",
+        "email": "david.collins@university.edu",
+        "degree": "PhD in Software Engineering",
+        "college": "Institute of Computing"
+      },
+      {
+        "name": "Prof. Alice Robinson",
+        "designation": "Professor",
+        "department": "CSE",
+        "email": "alice.robinson@university.edu",
+        "degree": "Master's in Computer Science",
+        "college": "University of Science and Technology"
+      },
+      {
+        "name": "Dr. George Walker",
+        "designation": "Assistant Professor",
+        "department": "ISE",
+        "email": "george.walker@university.edu",
+        "degree": "PhD in Network Security",
+        "college": "Global University"
+      },
+      {
+        "name": "Prof. Patricia White",
+        "designation": "Associate Professor",
+        "department": "CSE",
+        "email": "patricia.white@university.edu",
+        "degree": "Master's in Artificial Intelligence",
+        "college": "Central Technology University"
+      },
+      {
+        "name": "Dr. Christopher Allen",
+        "designation": "Professor",
+        "department": "ISE",
+        "email": "christopher.allen@university.edu",
+        "degree": "PhD in Cloud Computing",
+        "college": "International Engineering College"
+      },
+      {
+        "name": "Prof. Rachel Scott",
+        "designation": "Associate Professor",
+        "department": "CSE",
+        "email": "rachel.scott@university.edu",
+        "degree": "Master's in Data Science",
+        "college": "Tech Global University"
+      },
+      {
+        "name": "Dr. Michael Turner",
+        "designation": "Assistant Professor",
+        "department": "ISE",
+        "email": "michael.turner@university.edu",
+        "degree": "PhD in Information Systems",
+        "college": "National University of Technology"
+      },
+      {
+        "name": "Prof. Linda Adams",
+        "designation": "Professor",
+        "department": "CSE",
+        "email": "linda.adams@university.edu",
+        "degree": "Master's in Machine Learning",
+        "college": "State Tech University"
+      },
+      {
+        "name": "Dr. Benjamin Harris",
+        "designation": "Assistant Professor",
+        "department": "CSE",
+        "email": "benjamin.harris@university.edu",
+        "degree": "PhD in Robotics",
+        "college": "Techno University"
+      },
+      {
+        "name": "Prof. Amanda Green",
+        "designation": "Associate Professor",
+        "department": "ISE",
+        "email": "amanda.green@university.edu",
+        "degree": "Master's in Information Technology",
+        "college": "Global Tech University"
+      }
+    ]
+  }
+  

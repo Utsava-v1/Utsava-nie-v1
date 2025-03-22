@@ -1,0 +1,244 @@
+{
+  "students": [
+    {
+      "name": "Alice Smith",
+      "usn": "1BS19CS001",
+      "dob": "2001-06-15",
+      "branch": "CSE",
+      "interest": ["Artificial Intelligence", "Machine Learning"],
+      "email": "alice.smith@example.com"
+    },
+    {
+      "name": "Bob Johnson",
+      "usn": "1BS19CS002",
+      "dob": "2001-08-23",
+      "branch": "CSE",
+      "interest": ["Web Development", "Cloud Computing"],
+      "email": "bob.johnson@example.com"
+    },
+    {
+      "name": "Charlie Williams",
+      "usn": "1BS19CS003",
+      "dob": "2002-02-10",
+      "branch": "CSE",
+      "interest": ["Blockchain", "Cryptography"],
+      "email": "charlie.williams@example.com"
+    },
+    {
+      "name": "David Brown",
+      "usn": "1BS19CS004",
+      "dob": "2001-12-05",
+      "branch": "CSE",
+      "interest": ["Cybersecurity", "Networking"],
+      "email": "david.brown@example.com"
+    },
+    {
+      "name": "Ethan Davis",
+      "usn": "1BS19CS005",
+      "dob": "2001-10-19",
+      "branch": "CSE",
+      "interest": ["Data Science", "Statistics"],
+      "email": "ethan.davis@example.com"
+    },
+    {
+      "name": "Fiona Miller",
+      "usn": "1BS19CS006",
+      "dob": "2001-05-22",
+      "branch": "CSE",
+      "interest": ["Web Development", "Design"],
+      "email": "fiona.miller@example.com"
+    },
+    {
+      "name": "Grace Wilson",
+      "usn": "1BS19CS007",
+      "dob": "2002-01-11",
+      "branch": "CSE",
+      "interest": ["Mobile App Development", "Cloud Computing"],
+      "email": "grace.wilson@example.com"
+    },
+    {
+      "name": "Henry Moore",
+      "usn": "1BS19CS008",
+      "dob": "2001-07-29",
+      "branch": "CSE",
+      "interest": ["Gaming", "AI"],
+      "email": "henry.moore@example.com"
+    },
+    {
+      "name": "Isabella Taylor",
+      "usn": "1BS19CS009",
+      "dob": "2002-04-03",
+      "branch": "CSE",
+      "interest": ["UI/UX Design", "Software Engineering"],
+      "email": "isabella.taylor@example.com"
+    },
+    {
+      "name": "James Anderson",
+      "usn": "1BS19CS010",
+      "dob": "2001-11-14",
+      "branch": "CSE",
+      "interest": ["Networking", "System Administration"],
+      "email": "james.anderson@example.com"
+    },
+    {
+      "name": "Katherine Thomas",
+      "usn": "1BS19CS011",
+      "dob": "2002-09-30",
+      "branch": "CSE",
+      "interest": ["Cloud Infrastructure", "DevOps"],
+      "email": "katherine.thomas@example.com"
+    },
+    {
+      "name": "Liam Jackson",
+      "usn": "1BS19CS012",
+      "dob": "2002-03-25",
+      "branch": "CSE",
+      "interest": ["Robotics", "Mechatronics"],
+      "email": "liam.jackson@example.com"
+    },
+    {
+      "name": "Mason Harris",
+      "usn": "1BS19CS013",
+      "dob": "2001-12-18",
+      "branch": "CSE",
+      "interest": ["Data Structures", "Algorithms"],
+      "email": "mason.harris@example.com"
+    },
+    {
+      "name": "Noah Clark",
+      "usn": "1BS19CS014",
+      "dob": "2001-04-27",
+      "branch": "CSE",
+      "interest": ["Game Development", "AI"],
+      "email": "noah.clark@example.com"
+    },
+    {
+      "name": "Olivia Lewis",
+      "usn": "1BS19CS015",
+      "dob": "2001-09-05",
+      "branch": "CSE",
+      "interest": ["Machine Learning", "Data Science"],
+      "email": "olivia.lewis@example.com"
+    },
+    {
+      "name": "Peter Walker",
+      "usn": "1BS19CS016",
+      "dob": "2002-01-17",
+      "branch": "CSE",
+      "interest": ["Blockchain", "AI"],
+      "email": "peter.walker@example.com"
+    },
+    {
+      "name": "Quincy Hall",
+      "usn": "1BS19CS017",
+      "dob": "2002-06-13",
+      "branch": "CSE",
+      "interest": ["IoT", "Embedded Systems"],
+      "email": "quincy.hall@example.com"
+    },
+    {
+      "name": "Rachel Young",
+      "usn": "1BS19CS018",
+      "dob": "2002-03-01",
+      "branch": "CSE",
+      "interest": ["Software Development", "Cybersecurity"],
+      "email": "rachel.young@example.com"
+    },
+    {
+      "name": "Sophia King",
+      "usn": "1BS19CS019",
+      "dob": "2001-12-10",
+      "branch": "CSE",
+      "interest": ["Digital Marketing", "App Development"],
+      "email": "sophia.king@example.com"
+    },
+    {
+      "name": "Thomas Wright",
+      "usn": "1BS19CS020",
+      "dob": "2002-08-29",
+      "branch": "CSE",
+      "interest": ["Embedded Systems", "Robotics"],
+      "email": "thomas.wright@example.com"
+    },
+    {
+      "name": "Uma Scott",
+      "usn": "1BS19CS021",
+      "dob": "2002-02-20",
+      "branch": "CSE",
+      "interest": ["Networking", "Cloud Computing"],
+      "email": "uma.scott@example.com"
+    },
+    {
+      "name": "Vera Green",
+      "usn": "1BS19CS022",
+      "dob": "2001-11-05",
+      "branch": "CSE",
+      "interest": ["Game Development", "Artificial Intelligence"],
+      "email": "vera.green@example.com"
+    },
+    {
+      "name": "William Adams",
+      "usn": "1BS19CS023",
+      "dob": "2001-05-12",
+      "branch": "CSE",
+      "interest": ["Blockchain", "Cryptography"],
+      "email": "william.adams@example.com"
+    },
+    {
+      "name": "Xander Baker",
+      "usn": "1BS19CS024",
+      "dob": "2002-07-04",
+      "branch": "CSE",
+      "interest": ["Software Engineering", "Cloud Services"],
+      "email": "xander.baker@example.com"
+    },
+    {
+      "name": "Yasmine Rodriguez",
+      "usn": "1BS19CS025",
+      "dob": "2001-10-08",
+      "branch": "CSE",
+      "interest": ["Data Analysis", "Data Science"],
+      "email": "yasmine.rodriguez@example.com"
+    },
+    {
+      "name": "Zane Carter",
+      "usn": "1BS19CS026",
+      "dob": "2001-03-22",
+      "branch": "CSE",
+      "interest": ["Ethical Hacking", "Security"],
+      "email": "zane.carter@example.com"
+    },
+    {
+      "name": "Adeline Foster",
+      "usn": "1BS19CS027",
+      "dob": "2002-04-11",
+      "branch": "CSE",
+      "interest": ["Machine Learning", "Artificial Intelligence"],
+      "email": "adeline.foster@example.com"
+    },
+    {
+      "name": "Ben Miller",
+      "usn": "1BS19CS028",
+      "dob": "2002-06-28",
+      "branch": "CSE",
+      "interest": ["App Development", "Game Development"],
+      "email": "ben.miller@example.com"
+    },
+    {
+      "name": "Clara Bell",
+      "usn": "1BS19CS029",
+      "dob": "2001-09-21",
+      "branch": "CSE",
+      "interest": ["Data Science", "Cloud Computing"],
+      "email": "clara.bell@example.com"
+    },
+    {
+      "name": "Derek Martinez",
+      "usn": "1BS19CS030",
+      "dob": "2001-01-18",
+      "branch": "CSE",
+      "interest": ["Artificial Intelligence", "Natural Language Processing"],
+      "email": "derek.martinez@example.com"
+    }
+  ]
+}

@@ -1,0 +1,138 @@
+{
+  "organizers": [
+    {
+      "name": "IEEE",
+      "logo": "https://example.com/ieee_logo.png",
+      "description": "The IEEE is a global organization dedicated to advancing technology and innovation.",
+      "faculty_adviser": "Dr. John Doe",
+      "core_members": [
+        { "name": "Alice Smith", "usn": "1BS19CS001" },
+        { "name": "Bob Johnson", "usn": "1BS19CS002" },
+        { "name": "Charlie Williams", "usn": "1BS19CS003" }
+      ],
+      "email": "ieee@university.edu",
+      "past_events": [1],
+      "upcoming_events": [3]
+    },
+    {
+      "name": "GDSC",
+      "logo": "https://example.com/gdsc_logo.png",
+      "description": "The Google Developer Student Clubs bring together students interested in Google technologies.",
+      "faculty_adviser": "Prof. Jane Smith",
+      "core_members": [
+        { "name": "David Brown", "usn": "1BS19CS004" },
+        { "name": "Ethan Davis", "usn": "1BS19CS005" },
+        { "name": "Grace Wilson", "usn": "1BS19CS007" }
+      ],
+      "email": "gdsc@university.edu",
+      "past_events": [2],
+      "upcoming_events": [11]
+    },
+    {
+      "name": "BYTE club",
+      "logo": "https://example.com/byte_club_logo.png",
+      "description": "BYTE club is an organization that focuses on tech events and competitions, especially in gaming and programming.",
+      "faculty_adviser": "Dr. Alex Thomas",
+      "core_members": [
+        { "name": "John Doe", "usn": "1BS19CS010" },
+        { "name": "Rachel Green", "usn": "1BS19CS011" },
+        { "name": "Monica Geller", "usn": "1BS19CS012" }
+      ],
+      "email": "byteclub@university.edu",
+      "past_events": [3, 13],
+      "upcoming_events": [15]
+    },
+    {
+      "name": "CSE Department",
+      "logo": "/images/nie.jpg",
+      "description": "The Computer Science and Engineering Department organizes various technical and sports events.",
+      "faculty_adviser": "Prof. Rajesh Kumar",
+      "core_members": [
+        { "name": "Sanjay Patel", "usn": "1BS19CS006" },
+        { "name": "Priya Sharma", "usn": "1BS19CS007" },
+        { "name": "Vikram Singh", "usn": "1BS19CS008" }
+      ],
+      "email": "cse@university.edu",
+      "past_events": [4, 9],
+      "upcoming_events": [12]
+    },
+    {
+      "name": "Anveshan",
+      "logo": "/images/anveshan.jpg",
+      "description": "Anveshan is an innovative student organization focused on organizing competitive and challenging events.",
+      "faculty_adviser": "Prof. Suresh Reddy",
+      "core_members": [
+        { "name": "Amit Roy", "usn": "1BS19CS009" },
+        { "name": "Ravi Kumar", "usn": "1BS19CS010" }
+      ],
+      "email": "anveshan@university.edu",
+      "past_events": [5],
+      "upcoming_events": []
+    },
+    {
+      "name": "ISE Department",
+      "logo": "/images/nie.jpg",
+      "description": "The Information Science and Engineering Department hosts sports and technical events throughout the year.",
+      "faculty_adviser": "Prof. Neha Gupta",
+      "core_members": [
+        { "name": "Kiran Kumar", "usn": "1BS19ISE001" },
+        { "name": "Neha Rani", "usn": "1BS19ISE002" }
+      ],
+      "email": "ise@university.edu",
+      "past_events": [6],
+      "upcoming_events": []
+    },
+    {
+      "name": "TechNIEks",
+      "logo": "/images/technieks.jpg",
+      "description": "TeckNIEks is a student club that focuses on technological debates, performances, and competitions.",
+      "faculty_adviser": "Prof. Kavitha Suresh",
+      "core_members": [
+        { "name": "Suman Singh", "usn": "1BS19CS011" },
+        { "name": "Simran Kaur", "usn": "1BS19CS012" }
+      ],
+      "email": "tecknieks@university.edu",
+      "past_events": [7, 14],
+      "upcoming_events": []
+    },
+    {
+      "name": "OWASP",
+      "logo": "/images/owasp.jpg",
+      "description": "OWASP is an open-source security community that organizes workshops on cybersecurity and ethical hacking.",
+      "faculty_adviser": "Prof. Meena Prakash",
+      "core_members": [
+        { "name": "Ankur Verma", "usn": "1BS19CS013" },
+        { "name": "Shivani Patil", "usn": "1BS19CS014" }
+      ],
+      "email": "owasp@university.edu",
+      "past_events": [8],
+      "upcoming_events": []
+    },
+    {
+      "name": "ISSA",
+      "logo": "https://example.com/iss_logo.png",
+      "description": "The ISSA is focused on science and technology, and conducts quizzes and competitions in various scientific domains.",
+      "faculty_adviser": "Dr. Kumar Raghavan",
+      "core_members": [
+        { "name": "Anjali Verma", "usn": "1BS19CS015" },
+        { "name": "Vikram Mehta", "usn": "1BS19CS016" }
+      ],
+      "email": "iss@university.edu",
+      "past_events": [10],
+      "upcoming_events": []
+    },
+    {
+      "name": "Incubation Center",
+      "logo": "/images/nie.jpg",
+      "description": "The Incubation Center helps in organizing workshops on digital marketing and other startup-related events.",
+      "faculty_adviser": "Prof. Priya Venkatesh",
+      "core_members": [
+        { "name": "Riya Sharma", "usn": "1BS19CS017" },
+        { "name": "Nikhil Singh", "usn": "1BS19CS018" }
+      ],
+      "email": "incubation@university.edu",
+      "past_events": [12],
+      "upcoming_events": []
+    }
+  ]
+}

@@ -8,11 +8,11 @@ const Footer = () => {
                 <p className="text-lg">&copy; 2025 College Event Management. All Rights Reserved.</p>
                 <div className="flex flex-wrap justify-center items-center gap-4">
                     <Link to="/terms" className="hover:underline">Terms & Conditions</Link>
-                    <Link to="/privacy" className="hover:underline">Privacy Policy</Link>
+                    <Link to="/terms" className="hover:underline">Privacy Policy</Link>
                     <Link to="/about" className="hover:underline">About</Link>
                     <Link to="/feedback" className="hover:underline">Feedback</Link>
                 </div>
-                <p className="text-sm">Designed by <Link to='/the-creators'>Team Utsava</Link></p>
+                <p className="text-sm">Designed by <Link to='/developers'>Team Utsava</Link></p>
             </div>
         </footer>
     )

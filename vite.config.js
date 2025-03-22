@@ -8,4 +8,8 @@ export default defineConfig({
     react(),
     tailwindcss()
   ],
+  json:{
+    namedExports: true, 
+    stringify: true
+  }
 })
