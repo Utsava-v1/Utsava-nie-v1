@@ -4,10 +4,10 @@ import About from './pages/About';
 import Feedback from './pages/Feedback';
 import TnC from './pages/TnC';
 import Developers from './pages/Developers';
-import Login from './pages/Login';
-import Signup from './pages/Signup';
+import Student from './pages/Student';
+import Organizer from './pages/Organizer';
 import NotFound from './pages/NotFound';
-
+import CreateEvent from './pages/CreateEvent';
 import Layout from './Layout';
 import OrganizerDashboard from './pages/OrganizerDashboard';
 
@@ -21,8 +21,9 @@ function App() {
           <Route path='/feedback' element={<Feedback />} />
           <Route path='/terms' element={<TnC />} />
           <Route path='/developers' element={<Developers/>} />
-          <Route path='/login' element={<Login />} />
-          <Route path='/signup' element={<Signup />} />
+          <Route path='/student' element={<Student />} />
+          <Route path='/organizer' element={<Organizer />} />
+          <Route path={'/:organizerName/create-event'} element={<CreateEvent/>} />
           <Route path={'/:organizerName/dashboard'} element={<OrganizerDashboard/>} />
           <Route path='*' element={<NotFound />} />
         </Route>

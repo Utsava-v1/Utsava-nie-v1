@@ -18,8 +18,8 @@ const NavBar = () => {
                     <Link to="/feedback" className="!text-white text-lg uppercase h-full p-3 py-2 hover:!text-[#E63946]">Feedback</Link>
                 </div>
                 <div className='flex gap-10  border-white'>
-                    <Link to="/login" className="!text-white text-lg p-3 py-1 rounded-sm bg-[#E63946] hover:bg-[#F63956]">Student</Link>
-                    <Link to="/signup" className="!text-white text-lg p-3 py-1 rounded-sm bg-[#E63946] hover:bg-[#F63956]">Organizer</Link>
+                    <Link to="/student" className="!text-white text-lg p-3 py-1 rounded-sm bg-[#E63946] hover:bg-[#F63956]">Student</Link>
+                    <Link to="/organizer" className="!text-white text-lg p-3 py-1 rounded-sm bg-[#E63946] hover:bg-[#F63956]">Organizer</Link>
                 </div>
             </div>
 

@@ -72,7 +72,7 @@ const OrganizerDashboard = () => {
             {/* Create Event Button */}
             <div className="flex justify-end mt-6">
                 <Link 
-                    to="/create-event" 
+                    to={`/${organizer.name.toLowerCase().replace(/\s+/g, '-')}/create-event`} 
                     className="bg-[#E63946] text-white px-4 py-2 rounded-md hover:bg-[#D62828] transition"
                 >
                     + Create Event
