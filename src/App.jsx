@@ -10,27 +10,56 @@ import NotFound from './pages/NotFound';
 import CreateEvent from './pages/CreateEvent';
 import Layout from './Layout';
 import OrganizerDashboard from './pages/OrganizerDashboard';
+import Login from './pages/Login';
+import SignUp from './pages/Signup';
+import { AuthProvider } from './contexts/AuthContext';
+import PrivateRoute from './components/PrivateRoute';
+
+// added lines
+import { getFirestore } from 'firebase/firestore'; 
+import { getAuth } from 'firebase/auth';
+import { app } from './firebase';
+
+
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route element={<Layout />}>
-          <Route path='/' element={<Home />} />
-          <Route path='/about' element={<About />} />
-          <Route path='/feedback' element={<Feedback />} />
-          <Route path='/terms' element={<TnC />} />
-          <Route path='/developers' element={<Developers/>} />
-          <Route path='/student' element={<Student />} />
-          <Route path='/organizer' element={<Organizer />} />
-          <Route path={'/:organizerName/create-event'} element={<CreateEvent/>} />
-          <Route path={'/:organizerName/dashboard'} element={<OrganizerDashboard/>} />
-          <Route path='*' element={<NotFound />} />
-        </Route>
-
-      </Routes>
-
-    </Router>
+    <AuthProvider>
+      <Router>
+        <Routes>
+          <Route element={<Layout />}>
+            <Route path='/' element={<Home />} />
+            <Route path='/about' element={<About />} />
+            <Route path='/feedback' element={<Feedback />} />
+            <Route path='/terms' element={<TnC />} />
+            <Route path='/developers' element={<Developers/>} />
+            <Route path='/login' element={<Login />} />
+            <Route path='/signup' element={<SignUp />} />
+            <Route path='/student' element={
+              <PrivateRoute>
+                <Student />
+              </PrivateRoute>
+            } />
+            <Route path='/organizer' element={
+              <PrivateRoute>
+                <Organizer />
+              </PrivateRoute>
+            } />
+            <Route path={'/:organizerName/create-event'} element={
+              <PrivateRoute>
+                <CreateEvent/>
+              </PrivateRoute>
+            } />
+            <Route path={'/:organizerName/dashboard'} element={
+              <PrivateRoute>
+                <OrganizerDashboard/>
+              </PrivateRoute>
+            } />
+            <Route path='*' element={<NotFound />} />
+          </Route>
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 }
 

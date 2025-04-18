@@ -1,19 +1,20 @@
-// Import the functions you need
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 
-// Your Firebase config
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyCWnac5v_Lm0zu6APlopmguuWQMNBItCYE",
+  authDomain: "utsav-ems.firebaseapp.com",
+  projectId: "utsav-ems",
+  storageBucket: "utsav-ems.firebasestorage.app",
+  messagingSenderId: "771712968160",
+  appId: "1:771712968160:web:e26e929112924369623785",
+  measurementId: "G-KN1QD8XTD8"
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
