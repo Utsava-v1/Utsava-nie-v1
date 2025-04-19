@@ -16,7 +16,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import PrivateRoute from './components/PrivateRoute';
 
 // added lines
-import { getFirestore } from 'firebase/firestore'; 
+import { getFirestore } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { app } from './firebase';
 
@@ -28,31 +28,35 @@ function App() {
       <Router>
         <Routes>
           <Route element={<Layout />}>
-            <Route path='/' element={<Home />} />
+            <Route path='/' element={
+              <PrivateRoute>
+                <Home />
+              </PrivateRoute>
+            } />
             <Route path='/about' element={<About />} />
             <Route path='/feedback' element={<Feedback />} />
             <Route path='/terms' element={<TnC />} />
-            <Route path='/developers' element={<Developers/>} />
+            <Route path='/developers' element={<Developers />} />
             <Route path='/login' element={<Login />} />
-            <Route path='/signup' element={<SignUp />} />
+            <Route path='/student-signup' element={<SignUp />} />
             <Route path='/student' element={
               <PrivateRoute>
                 <Student />
               </PrivateRoute>
             } />
-            <Route path='/organizer' element={
-              <PrivateRoute>
+            <Route path='/organizer-signup' element={
+              // <PrivateRoute>
                 <Organizer />
-              </PrivateRoute>
+              // </PrivateRoute>
             } />
             <Route path={'/:organizerName/create-event'} element={
               <PrivateRoute>
-                <CreateEvent/>
+                <CreateEvent />
               </PrivateRoute>
             } />
             <Route path={'/:organizerName/dashboard'} element={
               <PrivateRoute>
-                <OrganizerDashboard/>
+                <OrganizerDashboard />
               </PrivateRoute>
             } />
             <Route path='*' element={<NotFound />} />

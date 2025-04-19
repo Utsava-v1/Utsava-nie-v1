@@ -3,6 +3,10 @@ import { useAuth } from '../contexts/AuthContext';
 
 export default function PrivateRoute({ children }) {
   const { currentUser } = useAuth();
+  const notLogged = ()=>{
+    alert("Kindly login first.")
+    return <Navigate to="/login" />;
+  }
 
-  return currentUser ? children : <Navigate to="/login" />;
+  return currentUser ? children : notLogged();
 } 

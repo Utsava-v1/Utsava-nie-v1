@@ -84,17 +84,15 @@ const Organizer = () => {
             {/* Tabs */}
             <div className="flex border-b mb-4">
                 <button
-                    className={`flex-1 p-3 text-center ${
-                        activeTab === 'login' ? 'border-b-2 border-[#1D3557] font-semibold' : 'text-gray-500'
-                    }`}
+                    className={`flex-1 p-3 text-center ${activeTab === 'login' ? 'border-b-2 border-[#1D3557] font-semibold' : 'text-gray-500'
+                        }`}
                     onClick={() => handleTabChange('login')}
                 >
                     Login
                 </button>
                 <button
-                    className={`flex-1 p-3 text-center ${
-                        activeTab === 'signup' ? 'border-b-2 border-[#1D3557] font-semibold' : 'text-gray-500'
-                    }`}
+                    className={`flex-1 p-3 text-center ${activeTab === 'signup' ? 'border-b-2 border-[#1D3557] font-semibold' : 'text-gray-500'
+                        }`}
                     onClick={() => handleTabChange('signup')}
                 >
                     Signup

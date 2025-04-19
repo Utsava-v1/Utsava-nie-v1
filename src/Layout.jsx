@@ -10,7 +10,7 @@ const Layout = () => {
                 <NavBar />
             </header>
 
-            <main className='min-h-[80vh]'>
+            <main className='min-h-[76vh] bg-[url(/images/undraw_complete-form_aarh.svg)] bg-fixed bg-cover bg-center'>
                 <Outlet />
             </main>
 

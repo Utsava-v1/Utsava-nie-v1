@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>College Event Organizer - Login</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background-color: #fdfdfb; /* Off-white */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 24px;
+      color: #1e3a8a; /* Deep Blue */
+    }
+
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    .login-btn {
+      width: 100%;
+      background-color: #1e3a8a;
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+
+    .login-btn:hover {
+      background-color: #2c4bb5;
+    }
+
+    .google-btn {
+      width: 100%;
+      background-color: white;
+      color: #444;
+      border: 1px solid #ccc;
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+      transition: background 0.2s;
+    }
+
+    .google-btn:hover {
+      background-color: #f0f0f0;
+    }
+
+    .google-btn img {
+      height: 18px;
+      width: 18px;
+    }
+
+    .or-divider {
+      margin: 16px 0;
+      font-size: 14px;
+      color: #777;
+    }
+
+    .forgot-password {
+      display: block;
+      margin-bottom: 20px;
+      color: #555;
+      font-size: 14px;
+      text-decoration: none;
+    }
+
+    .signup-divider {
+      margin: 20px 0 10px;
+      font-size: 14px;
+      color: #777;
+    }
+
+    .signup-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .signup-btn {
+      flex: 1 1 45%;
+      padding: 10px;
+      font-size: 14px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      color: white;
+      transition: background-color 0.3s;
+    }
+
+    .student-btn {
+      background-color: #1e3a8a;
+    }
+
+    .organizer-btn {
+      background-color: #dc2626;
+    }
+
+    .student-btn:hover {
+      background-color: #2c4bb5;
+    }
+
+    .organizer-btn:hover {
+      background-color: #b91c1c;
+    }
+
+    @media (max-width: 400px) {
+      .signup-btn {
+        flex: 1 1 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>🎓 College Event Organizer</h2>
+
+    <form>
+      <input type="email" placeholder="Email" required />
+      <input type="password" placeholder="Password" required />
+      <button type="submit" class="login-btn">Login</button>
+    </form>
+
+    <a href="#" class="forgot-password">Forgot Password?</a>
+
+    <div class="or-divider">— or —</div>
+
+    <button class="google-btn" onclick="handleGoogleLogin()">
+      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Icon" />
+      Login with Google
+    </button>
+
+    <div class="signup-divider">— New here? Sign up —</div>
+
+    <div class="signup-buttons">
+      <button class="signup-btn student-btn" onclick="window.location.href='signup-student.html'">
+        👨‍🎓 Sign up as Student
+      </button>
+      <button class="signup-btn organizer-btn" onclick="window.location.href='signup-organizer.html'">
+        📋 Sign up as Organizer
+      </button>
+    </div>
+  </div>
+
+  <script>
+    function handleGoogleLogin() {
+      // Replace with actual OAuth handling logic
+      alert("Redirecting to Google Login...");
+    }
+  </script>
+</body>
+</html>
