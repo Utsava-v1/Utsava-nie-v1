@@ -49,7 +49,7 @@ const NavBar = () => {
 
                   {currentUser.displayName || currentUser.name} {currentUser.email}
                 </>
-                : `${currentUser.displayName || currentUser.email}`.slice(0, 7).toUpperCase() + "..."}
+                : `${currentUser.displayName || currentUser.email}`.slice(0, 7) + "..."}
             </span>
 
             <button onClick={handleLogout} className="text-white text-lg p-3 py-1 rounded-sm bg-[#E63946] hover:bg-[#F63956]">Logout</button>
