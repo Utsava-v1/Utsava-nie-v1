@@ -27,8 +27,8 @@ const Feedback = () => {
 
     return (
 
-        <div className='min-w-[70%] m-5 mt-10 flex justify-center items-center self-center justify-self-center'>
-            <div className="bg-[#FFFFFF]/50 backdrop-blur-md w-auto p-5 rounded-lg  shadow-xl container flex flex-col justify-center items-center">
+        <div className='min-w-[70%] p-5  flex justify-center items-center self-center justify-self-center'>
+            <div className="bg-white w-auto p-5 rounded-lg  shadow-xl container flex flex-col justify-center items-center">
 
                 <h1 className="text-[#1D3557] text-4xl font-bold mb-5 max-md:text-2xl max-md:mb-2">📝Feedback</h1>
                 <p className="text-[#2F3E46] text-lg mb-5 w-[70%] max-md:text-sm">
@@ -70,7 +70,7 @@ const Feedback = () => {
                             rows="4"
                             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400"
                             value={message}
-                            placeholder='Message'
+                            placeholder='Your Feedback or Suggestions.'
                             onChange={(e) => setMessage(e.target.value)}
                             required
                         />

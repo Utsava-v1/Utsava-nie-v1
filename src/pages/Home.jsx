@@ -11,10 +11,10 @@ function Home() {
   return (
     <div>
       <Hero />
-      <section className="py-7 text-center">
-        <div className="container mx-auto px-5">
-          <h2 className="text-[#1D3557] text-4xl mb-5">Upcoming Events</h2>
-          <p className="text-[#2F3E46] text-lg mb-10">
+      <section className="py-7 text-center ">
+        <div className="container mx-auto px-5 bg-white/70 backdrop-blur-md">
+          <h2 className="text-[#1D3557] text-4xl mb-5">Upcoming Events 🎉</h2>
+          <p className="text-[#2F3E46] text-lg pb-5">
             Join our community and participate in various events designed to foster learning, networking, and fun!
           </p>
         </div>

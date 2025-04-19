@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 const Footer = () => {
     return (
-        <footer className="bg-[#010914] text-white text-center py-8 shadow-lg">
+        <footer className="bg-[url(/images/background.svg)] text-white text-center py-8 shadow-lg">
             <div className='flex flex-wrap items-center justify-evenly gap-5'>
                 <div className="text-gray-300 flex flex-col flex-wrap justify-evenly items-start gap-4 px-4 ">
                     <div className="flex flex-col flex-wrap justify-center items-start gap-4">

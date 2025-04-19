@@ -45,7 +45,7 @@ const Signup = () => {
 
   return (
     <div className="h-full w-auto m-5 flex items-center justify-center">
-      <div className="bg-white/50 backdrop-blur-md shadow-xl rounded-xl p-8 w-full max-w-lg">
+      <div className="bg-white backdrop-blur-md shadow-xl rounded-xl p-8 w-full max-w-lg">
         <div className='self-center justify-self-center'>
           <h2 className="text-3xl font-bold text-[#1D3557] mb-5 text-center">Welcome Onboard!😎</h2>
           <div className="text-gray-500 text-sm justify-self-center mb-5">Join us in the ocean of events.</div>

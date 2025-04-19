@@ -1,11 +1,11 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
 import About from './pages/About';
 import Feedback from './pages/Feedback';
 import TnC from './pages/TnC';
 import Developers from './pages/Developers';
 import Student from './pages/Student';
-import Organizer from './pages/Organizer';
+import SignupOrg from './pages/SignupOrg';
 import NotFound from './pages/NotFound';
 import CreateEvent from './pages/CreateEvent';
 import Layout from './Layout';
@@ -46,7 +46,7 @@ function App() {
             } />
             <Route path='/organizer-signup' element={
               // <PrivateRoute>
-                <Organizer />
+              <SignupOrg />
               // </PrivateRoute>
             } />
             <Route path={'/:organizerName/create-event'} element={
@@ -58,6 +58,9 @@ function App() {
               <PrivateRoute>
                 <OrganizerDashboard />
               </PrivateRoute>
+            } />
+            <Route path={'/:organizerName'} element={
+              Navigate
             } />
             <Route path='*' element={<NotFound />} />
           </Route>
