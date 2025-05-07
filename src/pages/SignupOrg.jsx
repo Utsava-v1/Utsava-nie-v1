@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
+import { db } from '../firebase';
+import { setDoc, doc } from 'firebase/firestore';
 
 const SignupOrg = () => {
   const [formData, setFormData] = useState({
@@ -14,7 +16,7 @@ const SignupOrg = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const { signup, signInWithGoogle } = useAuth();
+  const { signup } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -32,7 +34,16 @@ const SignupOrg = () => {
     try {
       setError('');
       setLoading(true);
-      await signup(formData.email, formData.password); // Add name/role to your backend if needed
+
+      await signup(formData.email, formData.password);
+
+      // Save to Firestore: using email as document ID
+      await setDoc(doc(db, 'organizing_group', formData.email), {
+        name: formData.name,
+        email: formData.email,
+        desc: formData.field,
+      });
+
       navigate('/');
     } catch (err) {
       setError('Failed to create an account: ' + err.message);
@@ -67,7 +78,6 @@ const SignupOrg = () => {
             required
             className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200"
           />
-
           <input
             type="email"
             name="email"
@@ -77,7 +87,6 @@ const SignupOrg = () => {
             required
             className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200"
           />
-
           <input
             type="password"
             name="password"
@@ -87,7 +96,6 @@ const SignupOrg = () => {
             required
             className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200"
           />
-
           <input
             type="password"
             name="confirmPassword"
@@ -100,15 +108,12 @@ const SignupOrg = () => {
           <input
             type="text"
             name="field"
-            placeholder="Field (eg. ML Club, Cybersecurity, Annual Fest)"
+            placeholder="Field (e.g., ML Club, Cybersecurity, Annual Fest)"
             value={formData.field}
             onChange={handleChange}
             required
             className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200"
           />
-
-
-
           <button
             type="submit"
             disabled={loading}
@@ -117,10 +122,6 @@ const SignupOrg = () => {
             Sign Up
           </button>
         </form>
-
-
-
-
       </div>
     </div>
   );

@@ -26,9 +26,9 @@ const Developer = () => {
     ]
 
     const facultyAdvisor = {
-        name: 'To Be Decided',
+        name: 'Mrs. Usha K Patil',
         role: 'Faculty Advisor',
-        image: 'https://images.unsplash.com/photo-1511367461989-f85a21fda167?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D'
+        image: 'https://nie.ac.in/wp-content/uploads/2023/01/ushapatil-cse.jpg'
     }
 
     return (

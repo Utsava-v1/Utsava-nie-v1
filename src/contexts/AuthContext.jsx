@@ -13,80 +13,68 @@ import { createUserProfile, getUserProfile } from '../utils/firestore';
 
 const AuthContext = createContext();
 
-export function useAuth() {
-  return useContext(AuthContext);
-}
+// Access via: const { currentUser, userProfile } = useAuth()
+export const useAuth = () => useContext(AuthContext);
 
-export function AuthProvider({ children }) {
-  const [currentUser, setCurrentUser] = useState(null);
+export const AuthProvider = ({ children }) => {
+  const [currentUser, setCurrentUser] = useState(null);      // Firebase user
+  const [userProfile, setUserProfile] = useState(null);      // Firestore profile
   const [loading, setLoading] = useState(true);
-  const [userProfile, setUserProfile] = useState(null);
 
-  // Sign up function
-  async function signup(email, password) {
-    try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      // Create user profile in Firestore
+  // Sign up with email and password
+  const signup = async (email, password) => {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    await createUserProfile(userCredential.user.uid, {
+      email: userCredential.user.email,
+      role: 'student',
+      displayName: userCredential.user.displayName || email.split('@')[0],
+      photoURL: userCredential.user.photoURL || null,
+    });
+    return userCredential;
+  };
+
+  // Login with email/password
+  const login = (email, password) => signInWithEmailAndPassword(auth, email, password);
+
+  // Logout
+  const logout = async () => {
+    setUserProfile(null);
+    await signOut(auth);
+  };
+
+  // Login with Google
+  const signInWithGoogle = async () => {
+    const provider = new GoogleAuthProvider();
+    const userCredential = await signInWithPopup(auth, provider);
+
+    // Create Firestore profile if it doesn't exist
+    const profile = await getUserProfile(userCredential.user.uid);
+    if (!profile) {
       await createUserProfile(userCredential.user.uid, {
         email: userCredential.user.email,
-        role: 'student', // Default role
-        displayName: userCredential.user.displayName || email.split('@')[0],
-        photoURL: userCredential.user.photoURL || null,
+        role: 'student',
+        displayName: userCredential.user.displayName,
+        photoURL: userCredential.user.photoURL,
       });
-      return userCredential;
-    } catch (error) {
-      throw error;
     }
-  }
 
-  // Login function
-  function login(email, password) {
-    return signInWithEmailAndPassword(auth, email, password);
-  }
+    return userCredential;
+  };
 
-  // Logout function
-  async function logout() {
-    setUserProfile(null);
-    return signOut(auth);
-  }
+  // Reset password
+  const resetPassword = (email) => sendPasswordResetEmail(auth, email);
 
-  // Google Sign in
-  async function signInWithGoogle() {
-    try {
-      const provider = new GoogleAuthProvider();
-      const userCredential = await signInWithPopup(auth, provider);
-      
-      // Check if user profile exists, if not create one
-      const profile = await getUserProfile(userCredential.user.uid);
-      if (!profile) {
-        await createUserProfile(userCredential.user.uid, {
-          email: userCredential.user.email,
-          role: 'student',
-          displayName: userCredential.user.displayName,
-          photoURL: userCredential.user.photoURL,
-        });
-      }
-      return userCredential;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  // Reset Password
-  function resetPassword(email) {
-    return sendPasswordResetEmail(auth, email);
-  }
-
-  // Load user profile
-  async function loadUserProfile(user) {
+  // Load Firestore user profile
+  const loadUserProfile = async (user) => {
     if (user) {
       const profile = await getUserProfile(user.uid);
       setUserProfile(profile);
     } else {
       setUserProfile(null);
     }
-  }
+  };
 
+  // Listen to auth state changes
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setCurrentUser(user);
@@ -99,7 +87,7 @@ export function AuthProvider({ children }) {
 
   const value = {
     currentUser,
-    userProfile,
+    userProfile,  // This replaces the misleading name `currentUserDetails`
     signup,
     login,
     logout,
@@ -112,4 +100,4 @@ export function AuthProvider({ children }) {
       {!loading && children}
     </AuthContext.Provider>
   );
-} 
+};

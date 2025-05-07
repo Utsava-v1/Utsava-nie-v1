@@ -145,18 +145,26 @@ export const updateRegistrationStatus = async (eventId, userId, status) => {
 };
 
 // Feedback Operations
-export const submitFeedback = async (eventId, userId, feedbackData) => {
+export const submitFeedback = async (eventId, studentId, feedbackData) => {
   try {
-    const feedbackRef = collection(db, 'events', eventId, 'feedback');
-    await setDoc(doc(feedbackRef, userId), {
-      ...feedbackData,
-      userId,
-      submittedAt: serverTimestamp(),
+    const feedbackRef = collection(db, 'feedback');
+    const docRef = await addDoc(feedbackRef, {
+      feedback_id: '',  // Optional: if you want to use Firestore auto-generated ID
+      student_id: studentId,
+      rating: feedbackData.rating,
+      comments: feedbackData.comments,
+      date: serverTimestamp(),
     });
+
+    console.log('Feedback successfully submitted to Firestore with doc ID: ', docRef.id);
+    return docRef.id;
   } catch (error) {
+    console.error('Error submitting feedback: ', error);
     throw new Error('Error submitting feedback: ' + error.message);
   }
 };
+
+
 
 export const getEventFeedback = async (eventId) => {
   try {

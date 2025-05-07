@@ -1,139 +1,109 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { collection, addDoc, Timestamp, getDocs, query, where } from 'firebase/firestore';
+import { db } from '../firebase';
 
 const CreateEvent = () => {
-    const { organizerName } = useParams(); // Get organizerName from URL params
-
+    const { organizerName } = useParams();
     const [formData, setFormData] = useState({
-        title: '',
+        name: '',
         date: '',
-        location: '',
-        description: '',
-        capacity: '',
-        organizer: organizerName, // Set directly from the URL param
-        registrationLink: '',
+        time: '',
+        venue: '',
+        image: null,
     });
-
     const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
+    const [organizerRef, setOrganizerRef] = useState(null);
 
     useEffect(() => {
-        // Set organizer name from URL param on load
-        setFormData((prev) => ({ ...prev, organizer: organizerName }));
+        const fetchOrganizerRef = async () => {
+            const nameFromParam = organizerName.replace(/-/g, ' ').toLowerCase();
+
+            const q = query(collection(db, 'organizing_group'));
+
+            const snap = await getDocs(q);
+            const matchingDoc = snap.docs.find(doc =>
+                doc.data().name.toLowerCase() === nameFromParam
+            );
+
+            if (matchingDoc) {
+                setOrganizerRef(matchingDoc.ref);
+            } else {
+                setError('Organizer not found');
+            }
+        };
+
+        fetchOrganizerRef();
     }, [organizerName]);
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
-    };
-
-    const validateForm = () => {
-        if (
-            !formData.title ||
-            !formData.date ||
-            !formData.location ||
-            !formData.description ||
-            !formData.capacity ||
-            !formData.registrationLink
-        ) {
-            setError('All fields are required.');
-            return false;
+        const { name, value, files } = e.target;
+        if (name === 'image') {
+            setFormData((prev) => ({ ...prev, image: files[0] }));
+        } else {
+            setFormData((prev) => ({ ...prev, [name]: value }));
         }
-
-        if (isNaN(formData.capacity) || formData.capacity <= 0) {
-            setError('Capacity must be a positive number.');
-            return false;
-        }
-
-        setError('');
-        return true;
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!validateForm()) return;
+        setError('');
+        setSuccess('');
+
+        if (!formData.name || !formData.date || !formData.time || !formData.venue) {
+            setError('Please fill all fields');
+            return;
+        }
+
+        if (!organizerRef) {
+            setError('Organizer reference not found');
+            return;
+        }
 
         try {
-            const response = await fetch('/api/events/create', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData),
+            await addDoc(collection(db, 'events'), {
+                name: formData.name,
+                date: Timestamp.fromDate(new Date(formData.date)),
+                time: formData.time,
+                venue: formData.venue,
+                image_name: formData.image ? formData.image.name : null,
+                organizing_group_id: organizerRef,
             });
 
-            if (!response.ok) throw new Error('Failed to create event');
-            alert('Event created successfully!');
+            setSuccess('Event created successfully!');
+            setFormData({ name: '', date: '', time: '', venue: '', image: null });
         } catch (err) {
-            setError(err.message);
+            console.error(err);
+            setError('Failed to create event');
         }
     };
 
     return (
-        <div className="max-w-lg mx-auto p-6 bg-white rounded-lg shadow-md mt-8">
-            <h2 className="text-2xl font-bold text-[#1D3557] mb-4">Create New Event</h2>
-
+        <div className="max-w-xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-lg">
+            <h2 className="text-3xl font-semibold mb-4 text-[#1D3557]">
+                {organizerName} - Create New Event
+            </h2> 
             <form onSubmit={handleSubmit} className="space-y-4">
-                <input
-                    type="text"
-                    name="title"
-                    value={formData.title}
-                    onChange={handleChange}
-                    placeholder="Event Title"
-                    className="w-full border p-2 rounded-md"
-                    required
-                />
-                <input
-                    type="date"
-                    name="date"
-                    value={formData.date}
-                    onChange={handleChange}
-                    className="w-full border p-2 rounded-md"
-                    required
-                />
-                <input
-                    type="text"
-                    name="location"
-                    value={formData.location}
-                    onChange={handleChange}
-                    placeholder="Location"
-                    className="w-full border p-2 rounded-md"
-                    required
-                />
-                <textarea
-                    name="description"
-                    value={formData.description}
-                    onChange={handleChange}
-                    placeholder="Event Description"
-                    className="w-full border p-2 rounded-md h-24"
-                    required
-                />
-                <input
-                    type="number"
-                    name="capacity"
-                    value={formData.capacity}
-                    onChange={handleChange}
-                    placeholder="Capacity"
-                    className="w-full border p-2 rounded-md"
-                    required
-                />
-                <input
-                    type="text"
-                    name="organizer"
-                    value={formData.organizer}
-                    readOnly
-                    className="w-full border p-2 rounded-md bg-gray-100"
-                />
-                <input
-                    type="url"
-                    name="registrationLink"
-                    value={formData.registrationLink}
-                    onChange={handleChange}
-                    placeholder="Registration Link"
-                    className="w-full border p-2 rounded-md"
-                    required
-                />
+                <input type="text" name="name" value={formData.name} onChange={handleChange}
+                    placeholder="Event Name" className="w-full p-2 border rounded" required />
 
-                {error && <p className="text-red-500 text-sm">{error}</p>}
+                <input type="date" name="date" value={formData.date} onChange={handleChange}
+                    className="w-full p-2 border rounded" required />
 
-                <button type="submit" className="w-full bg-[#1D3557] text-white py-2 rounded-md mt-2 hover:bg-[]">
+                <input type="time" name="time" value={formData.time} onChange={handleChange}
+                    className="w-full p-2 border rounded" required />
+
+                <input type="text" name="venue" value={formData.venue} onChange={handleChange}
+                    placeholder="Venue" className="w-full p-2 border rounded" required />
+
+                <input type="file" name="image" onChange={handleChange}
+                    className="w-full p-2 border rounded" accept="image/*" />
+
+                {error && <p className="text-red-500">{error}</p>}
+                {success && <p className="text-green-500">{success}</p>}
+
+                <button type="submit" className="w-full bg-[#1D3557] text-white py-2 rounded hover:bg-[#457B9D]">
                     Create Event
                 </button>
             </form>

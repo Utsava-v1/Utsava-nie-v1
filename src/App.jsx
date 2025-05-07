@@ -4,7 +4,7 @@ import About from './pages/About';
 import Feedback from './pages/Feedback';
 import TnC from './pages/TnC';
 import Developers from './pages/Developers';
-import Student from './pages/Student';
+import StudentProfile from './pages/StudentProfile';
 import SignupOrg from './pages/SignupOrg';
 import NotFound from './pages/NotFound';
 import CreateEvent from './pages/CreateEvent';
@@ -12,60 +12,73 @@ import Layout from './Layout';
 import OrganizerDashboard from './pages/OrganizerDashboard';
 import Login from './pages/Login';
 import SignUp from './pages/Signup';
-import { AuthProvider } from './contexts/AuthContext';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 import PrivateRoute from './components/PrivateRoute';
+import RegisterEvent from './pages/RegisterEvent';
 
-// added lines
-import { getFirestore } from 'firebase/firestore';
-import { getAuth } from 'firebase/auth';
-import { app } from './firebase';
+function AppContent() {
+  const { userProfile } = useAuth();
+
+  const currentUserUSN = userProfile?.usn || null;
+  const currentUserEmail = userProfile?.email || null;
+  const role = userProfile?.role || null;
 
 
+
+
+  return (
+    <Router>
+      <Routes>
+        <Route element={<Layout />}>
+          <Route path='/' element={
+            <PrivateRoute currentUserUSN={currentUserUSN} currentUserEmail={currentUserEmail} role={role}>
+              <Home />
+            </PrivateRoute>
+          } />
+          <Route path='/about' element={<About />} />
+          <Route path='/feedback' element={
+            <PrivateRoute currentUserUSN={currentUserUSN} currentUserEmail={currentUserEmail} role={role}>
+              <Feedback currentUserUSN={currentUserUSN} currentUserEmail={currentUserEmail} role={role} eventId={'platform'} />
+            </PrivateRoute>
+          } />
+          <Route path='/terms' element={<TnC />} />
+          <Route path='/developers' element={<Developers />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/student-signup' element={<SignUp />} />
+          <Route path='/:student/profile' element={
+            <PrivateRoute currentUserUSN={currentUserUSN} currentUserEmail={currentUserEmail} role={role}>
+              <StudentProfile />
+            </PrivateRoute>
+          } />
+          <Route path='/:event_id/register' element={
+            <PrivateRoute currentUserUSN={currentUserUSN} currentUserEmail={currentUserEmail} role={role}>
+              <RegisterEvent />
+            </PrivateRoute>
+          } />
+
+          <Route path='/organizer-signup' element={<SignupOrg />} />
+          <Route path='/:organizerName/create-event' element={
+            <PrivateRoute currentUserUSN={currentUserUSN} currentUserEmail={currentUserEmail} role={role}>
+              <CreateEvent />
+            </PrivateRoute>
+          } />
+          <Route path='/:organizerName/dashboard' element={
+            <PrivateRoute currentUserUSN={currentUserUSN} currentUserEmail={currentUserEmail} role={role}>
+              <OrganizerDashboard />
+            </PrivateRoute>
+          } />
+          <Route path='/:organizerName' element={<Navigate to="/" />} />
+          <Route path='*' element={<NotFound />} />
+        </Route>
+      </Routes>
+    </Router>
+  );
+}
 
 function App() {
   return (
     <AuthProvider>
-      <Router>
-        <Routes>
-          <Route element={<Layout />}>
-            <Route path='/' element={
-              <PrivateRoute>
-                <Home />
-              </PrivateRoute>
-            } />
-            <Route path='/about' element={<About />} />
-            <Route path='/feedback' element={<Feedback />} />
-            <Route path='/terms' element={<TnC />} />
-            <Route path='/developers' element={<Developers />} />
-            <Route path='/login' element={<Login />} />
-            <Route path='/student-signup' element={<SignUp />} />
-            <Route path='/student' element={
-              <PrivateRoute>
-                <Student />
-              </PrivateRoute>
-            } />
-            <Route path='/organizer-signup' element={
-              // <PrivateRoute>
-              <SignupOrg />
-              // </PrivateRoute>
-            } />
-            <Route path={'/:organizerName/create-event'} element={
-              <PrivateRoute>
-                <CreateEvent />
-              </PrivateRoute>
-            } />
-            <Route path={'/:organizerName/dashboard'} element={
-              <PrivateRoute>
-                <OrganizerDashboard />
-              </PrivateRoute>
-            } />
-            <Route path={'/:organizerName'} element={
-              Navigate
-            } />
-            <Route path='*' element={<NotFound />} />
-          </Route>
-        </Routes>
-      </Router>
+      <AppContent />
     </AuthProvider>
   );
 }

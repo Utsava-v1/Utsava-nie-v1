@@ -1,11 +1,30 @@
-import React from 'react'
-import NavBar from "./components/NavBar"
-import { Link, Outlet } from 'react-router-dom'
-import Footer from './components/Footer'
+import React, { useEffect, useState } from 'react';
+import { Outlet, useLocation } from 'react-router-dom';
+import NavBar from "./components/NavBar";
+import Footer from './components/Footer';
+import Loading from './components/Loading'; // Make sure this component exists
 
 const Layout = () => {
+    const location = useLocation();
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        setLoading(true);
+
+        // Generate a random duration between 100ms and 1000ms
+        const randomDelay = Math.floor(Math.random() * (1000 - 100 + 1)) + 100;
+
+        const timer = setTimeout(() => {
+            setLoading(false);
+        }, randomDelay);
+
+        return () => clearTimeout(timer);
+    }, [location]);
+
     return (
         <>
+            {loading && <Loading />} {/* Show loader on route change */}
+
             <header>
                 <NavBar />
             </header>
@@ -14,10 +33,9 @@ const Layout = () => {
                 <Outlet />
             </main>
 
-            <Footer/>
+            <Footer />
         </>
+    );
+};
 
-    )
-}
-
-export default Layout
+export default Layout;

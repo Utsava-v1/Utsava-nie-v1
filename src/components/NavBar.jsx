@@ -1,10 +1,17 @@
-import { React, useRef, userEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext'; // Adjust path if needed
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
+import { getDocs, query, where, collection } from 'firebase/firestore';
+import { db } from '../firebase';
 
 const NavBar = () => {
   const { currentUser, logout } = useAuth();
   const [showUserDetails, setShowUserDetails] = useState(false);
+  const [role, setRole] = useState(null);
+  const [organizerName, setOrganizerName] = useState('');
+  const [studentUsn, setStudentUsn] = useState('');
+  const [loadingRole, setLoadingRole] = useState(true);
+  const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
@@ -14,9 +21,48 @@ const NavBar = () => {
     }
   };
 
-  const toggleUserInfo = () => {
-    setShowUserDetails(prev => !prev);
-  }
+  const handleProfileClick = () => {
+    if (loadingRole) return;
+
+    if (role === 'student') navigate(`/${studentUsn}/profile`);
+    else if (role === 'organizer') navigate(`/${organizerName}/dashboard`);
+    else alert("Role not recognized");
+  };
+
+  useEffect(() => {
+    const fetchRole = async () => {
+      if (!currentUser?.email) {
+        setLoadingRole(false);
+        return;
+      }
+
+      try {
+        const studentQuery = query(collection(db, 'students'), where('email', '==', currentUser.email));
+        const organizerQuery = query(collection(db, 'organizing_group'), where('email', '==', currentUser.email));
+
+        const [studentSnap, organizerSnap] = await Promise.all([
+          getDocs(studentQuery),
+          getDocs(organizerQuery),
+        ]);
+
+        if (!studentSnap.empty) {
+          const studentData = studentSnap.docs[0].data();
+          setRole('student');
+          setStudentUsn(studentData.usn);
+        } else if (!organizerSnap.empty) {
+          const organizerData = organizerSnap.docs[0].data();
+          setRole('organizer');
+          setOrganizerName(organizerData.name);
+        }
+      } catch (err) {
+        console.error("Error fetching role:", err);
+      } finally {
+        setLoadingRole(false);
+      }
+    };
+
+    fetchRole();
+  }, [currentUser]);
 
   return (
     <nav className="bg-[#1D3557] flex justify-between items-center !p-2 !pl-5 !pr-5">
@@ -39,17 +85,14 @@ const NavBar = () => {
           </div>
         ) : (
           <div className='flex items-center gap-5 text-white'>
-            {/* for identifing student and organizer */}
             <span
-              onClick={toggleUserInfo}
-              className="cursor-pointer text-lg hover:text-[#E63946] transition"
+              onClick={handleProfileClick}
+              className={`cursor-pointer text-lg transition ${loadingRole ? 'opacity-50 pointer-events-none' : 'hover:text-[#E63946]'}`}
+              title={loadingRole ? "Loading role..." : "Go to dashboard"}
             >
               {showUserDetails
-                ? <>
-
-                  {currentUser.displayName || currentUser.name} {currentUser.email}
-                </>
-                : `${currentUser.displayName || currentUser.email}`.slice(0, 7) + "..."}
+                ? `${currentUser.displayName || currentUser.email}`
+                : `${(currentUser.displayName || currentUser.email).slice(0, 7)}...`}
             </span>
 
             <button onClick={handleLogout} className="text-white text-lg p-3 py-1 rounded-sm bg-[#E63946] hover:bg-[#F63956]">Logout</button>

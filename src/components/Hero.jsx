@@ -35,10 +35,11 @@ const Hero = () => {
                 className="bg-cover bg-center Michel h-full flex justify-center items-center text-white text-center"
                 style={{ backgroundImage: `url(${images[currentIndex]})` }}
             >
-
-                <h2 className="text-5xl font-bold text-shadow-lg tracking-wide text-white">
-                    Discover Exciting Events for Students
-                </h2>
+                <div className='h-full w-full flex items-center justify-center bg-black/50'>
+                    <h2 className="text-5xl font-bold text-shadow-lg tracking-wide text-white">
+                        Discover Exciting Events in your Campus.
+                    </h2>
+                </div>
             </div>
 
             {/* Left Arrow Button */}
