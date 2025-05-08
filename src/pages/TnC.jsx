@@ -10,6 +10,7 @@ const TnC = () => {
             </p>
             <ul className="list-disc pl-5 mb-6 text-gray-700">
                 <li>You must be at least 18 years old to use this site.</li>
+                <li>You must be a member of The National Institute of Engineering to use this site.</li>
                 <li>All content on this site is for informational purposes only.</li>
                 <li>We reserve the right to modify or terminate the service at any time.</li>
             </ul>
