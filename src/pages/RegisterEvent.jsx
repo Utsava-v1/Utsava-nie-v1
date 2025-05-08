@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase';
 
 function RegisterEvent() {
@@ -37,11 +37,29 @@ function RegisterEvent() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Registration data:', formData);
-    alert('Registered successfully!');
-    // 🔒 TODO: Save to Firestore -> registrations collection
+
+    try {
+      const registration_id = `${event_id}_${formData.usn}`;
+      const registrationData = {
+        registration_id,
+        event_id,
+        name: formData.name,
+        usn: formData.usn,
+        email: formData.email,
+        semester: formData.semester,
+        timestamp: serverTimestamp(),
+      };
+
+      await setDoc(doc(db, 'registrations', registration_id), registrationData);
+
+      alert('Registered successfully!');
+      setFormData({ name: '', usn: '', email: '', semester: '' });
+    } catch (error) {
+      console.error('Registration failed:', error);
+      alert('Failed to register. Please try again.');
+    }
   };
 
   return (
