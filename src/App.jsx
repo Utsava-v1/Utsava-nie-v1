@@ -19,6 +19,11 @@ import RegisterEvent from './pages/RegisterEvent';
 function AppContent() {
   const { userProfile } = useAuth();
 
+  
+  // if (loading) {
+  //   return <div>Loading...</div>;  // show spinner or loading screen
+  // }
+
   const currentUserUSN = userProfile?.usn || null;
   const currentUserEmail = userProfile?.email || null;
   const role = userProfile?.role || null;

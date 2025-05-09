@@ -26,30 +26,38 @@ const StudentProfile = () => {
         const studentData = studentDoc.data();
         setStudent(studentData);
 
-        const studentRef = studentDoc.ref;
-
-        // 2. Get feedback entries where student_id matches
-        const feedbackQuery = query(
-          collection(db, 'feedback'),
-          where('student_id', '==', studentRef)
+        // 2. Get registrations where student email matches
+        const registrationsQuery = query(
+          collection(db, 'registrations'),
+          where('email', '==', currentUser.email)
         );
-        const feedbackSnap = await getDocs(feedbackQuery);
+        const registrationsSnap = await getDocs(registrationsQuery);
 
         const now = new Date();
         const allEvents = [];
 
-        for (const fb of feedbackSnap.docs) {
-          const eventRef = fb.data().event_id;
-          const eventDoc = await getDoc(eventRef);
+        // 3. Get event details for each registration
+        for (const reg of registrationsSnap.docs) {
+          const eventId = reg.data().event_id;
+          const eventDoc = await getDoc(doc(db, 'events', eventId));
 
           if (eventDoc.exists()) {
             const eventData = eventDoc.data();
-            allEvents.push({ id: eventDoc.id, ...eventData });
+            allEvents.push({ 
+              id: eventDoc.id, 
+              ...eventData,
+              registrationDate: reg.data().timestamp
+            });
           }
         }
 
-        const upcoming = allEvents.filter(event => new Date(event.date.toDate?.() || event.date) >= now);
-        const past = allEvents.filter(event => new Date(event.date.toDate?.() || event.date) < now);
+        // 4. Separate into upcoming and past events
+        const upcoming = allEvents.filter(event => 
+          new Date(event.date.toDate?.() || event.date) >= now
+        );
+        const past = allEvents.filter(event => 
+          new Date(event.date.toDate?.() || event.date) < now
+        );
 
         setUpcomingEvents(upcoming);
         setPastEvents(past);
@@ -84,7 +92,7 @@ const StudentProfile = () => {
                 key={event.id}
                 id={event.id}
                 title={event.name}
-                date={event.date}
+                date={event.date.toDate?.().toLocaleDateString() || event.date}
                 type={event.type}
                 participants={event.participants}
                 isUpcoming={true}
@@ -106,7 +114,7 @@ const StudentProfile = () => {
                 key={event.id}
                 id={event.id}
                 title={event.name}
-                date={event.date}
+                date={event.date.toDate?.().toLocaleDateString() || event.date}
                 type={event.type}
                 participants={event.participants}
               />

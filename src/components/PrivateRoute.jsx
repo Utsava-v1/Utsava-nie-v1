@@ -5,10 +5,10 @@ import React from 'react';
 export default function PrivateRoute({ children, currentUserUSN, currentUserEmail, role }) {
   const { currentUser } = useAuth();
 
-  const notLogged = () => {
+  if (!currentUser) {
     alert("Kindly login first.");
     return <Navigate to="/login" />;
-  };
+  }
 
   // Pass props to child component if logged in
   return currentUser
