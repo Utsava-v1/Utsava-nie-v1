@@ -11,6 +11,8 @@ const CreateEvent = () => {
         time: '',
         venue: '',
         image: null,
+        description: '',
+        type: '',
     });
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
@@ -72,7 +74,7 @@ const CreateEvent = () => {
             });
 
             setSuccess('Event created successfully!');
-            setFormData({ name: '', date: '', time: '', venue: '', image: null });
+            setFormData({ name: '', date: '', time: '', venue: '', image: null, description: '', type: '' });
         } catch (err) {
             console.error(err);
             setError('Failed to create event');
@@ -94,8 +96,42 @@ const CreateEvent = () => {
                 <input type="time" name="time" value={formData.time} onChange={handleChange}
                     className="w-full p-2 border rounded" required />
 
-                <input type="text" name="venue" value={formData.venue} onChange={handleChange}
-                    placeholder="Venue" className="w-full p-2 border rounded" required />
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Venue</label>
+                    <input
+                        type="text"
+                        name="venue"
+                        value={formData.venue}
+                        onChange={handleChange}
+                        className="w-full p-2 border rounded focus:ring-2 focus:ring-[#1D3557] focus:border-transparent"
+                        required
+                    />
+                </div>
+
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                    <textarea
+                        name="description"
+                        value={formData.description}
+                        onChange={handleChange}
+                        rows="4"
+                        className="w-full p-2 border rounded focus:ring-2 focus:ring-[#1D3557] focus:border-transparent"
+                        placeholder="Enter event description..."
+                        required
+                    />
+                </div>
+
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
+                    <input
+                        type="text"
+                        name="type"
+                        value={formData.type}
+                        onChange={handleChange}
+                        className="w-full p-2 border rounded"
+                        required
+                    />
+                </div>
 
                 <input type="file" name="image" onChange={handleChange}
                     className="w-full p-2 border rounded" accept="image/*" />

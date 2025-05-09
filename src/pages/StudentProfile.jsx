@@ -96,6 +96,8 @@ const StudentProfile = () => {
                 type={event.type}
                 participants={event.participants}
                 isUpcoming={true}
+                venue={event.venue}
+                description={event.description}
               />
             ))
           ) : (
@@ -117,6 +119,9 @@ const StudentProfile = () => {
                 date={event.date.toDate?.().toLocaleDateString() || event.date}
                 type={event.type}
                 participants={event.participants}
+                isUpcoming={false}
+                venue={event.venue}
+                description={event.description}
               />
             ))
           ) : (

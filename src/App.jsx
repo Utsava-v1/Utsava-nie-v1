@@ -15,6 +15,10 @@ import SignUp from './pages/Signup';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import PrivateRoute from './components/PrivateRoute';
 import RegisterEvent from './pages/RegisterEvent';
+import EditEvent from './pages/EditEvent';
+import ManageEvent from './pages/ManageEvent';
+import EditRegistration from './pages/EditRegistration';
+import EventFeedback from './pages/EventFeedback';
 
 function AppContent() {
   const { userProfile } = useAuth();
@@ -67,12 +71,32 @@ function AppContent() {
               <CreateEvent />
             </PrivateRoute>
           } />
+          <Route path='/edit-event/:eventId' element={
+            <PrivateRoute currentUserUSN={currentUserUSN} currentUserEmail={currentUserEmail} role={role}>
+              <EditEvent />
+            </PrivateRoute>
+          } />
+          <Route path='/manage-event/:eventId' element={
+            <PrivateRoute currentUserUSN={currentUserUSN} currentUserEmail={currentUserEmail} role={role}>
+              <ManageEvent />
+            </PrivateRoute>
+          } />
           <Route path='/:organizerName/dashboard' element={
             <PrivateRoute currentUserUSN={currentUserUSN} currentUserEmail={currentUserEmail} role={role}>
               <OrganizerDashboard />
             </PrivateRoute>
           } />
           <Route path='/:organizerName' element={<Navigate to="/" />} />
+          <Route path='/edit-registration/:registrationId' element={
+            <PrivateRoute>
+              <EditRegistration />
+            </PrivateRoute>
+          } />
+          <Route path='/event-feedback/:eventId' element={
+            <PrivateRoute currentUserUSN={currentUserUSN} currentUserEmail={currentUserEmail} role={role}>
+              <EventFeedback />
+            </PrivateRoute>
+          } />
           <Route path='*' element={<NotFound />} />
         </Route>
       </Routes>
