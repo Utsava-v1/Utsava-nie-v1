@@ -1,240 +1,158 @@
-import { Link, useParams, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { collection, getDocs, query, where, doc, getDoc, deleteDoc } from 'firebase/firestore';
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase';
-import DashboardEventCard from '../components/DashboardEventCard';
 import { useAuth } from '../contexts/AuthContext';
+import { toast } from 'react-toastify';
 
 const OrganizerDashboard = () => {
-    const { organizerName } = useParams();
-    const navigate = useNavigate();
-    const { userProfile } = useAuth();
-    const [organizer, setOrganizer] = useState(null);
-    const [upcomingEvents, setUpcomingEvents] = useState([]);
-    const [pastEvents, setPastEvents] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState('');
+  const { orgName } = useParams(); // Expects /:orgName/dashboard
+  const { currentUser } = useAuth();
+  const [organizer, setOrganizer] = useState(null);
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
-    const fetchOrganizerData = async () => {
-        try {
-            setIsLoading(true);
-            // Fetch the organizer document
-            const organizerQuery = query(
-                collection(db, 'organizing_group'),
-                where('name', '==', organizerName.replace(/-/g, ' '))
-            );
-            const querySnapshot = await getDocs(organizerQuery);
+  useEffect(() => {
+    const fetchOrganizer = async () => {
+      if (!currentUser) {
+        toast.error('Please log in to access the dashboard');
+        navigate('/login');
+        return;
+      }
 
-            if (querySnapshot.empty) {
-                navigate('/404');
-                return;
-            }
-
-            const organizerDoc = querySnapshot.docs[0];
-            const organizerData = organizerDoc.data();
-            const organizerId = organizerDoc.id;
-            setOrganizer({ ...organizerData, id: organizerId });
-
-            // Fetch all events
-            const eventsSnap = await getDocs(collection(db, 'events'));
-
-            // Filter events where organizing_group_id.id === organizerId
-            const organizerEvents = [];
-
-            for (const docSnap of eventsSnap.docs) {
-                const data = docSnap.data();
-                const orgRef = data.organizing_group_id;
-
-                let orgId = null;
-                if (typeof orgRef === 'string') {
-                    orgId = orgRef;
-                } else if (orgRef?.id) {
-                    orgId = orgRef.id;
-                }
-
-                if (orgId === organizerId) {
-                    organizerEvents.push({ id: docSnap.id, ...data });
-                }
-            }
-
-            // Separate into upcoming and past
-            const now = new Date();
-            const upcoming = organizerEvents.filter(event =>
-                new Date(event.date.toDate?.() || event.date) >= now
-            );
-            const past = organizerEvents.filter(event =>
-                new Date(event.date.toDate?.() || event.date) < now
-            );
-
-            setUpcomingEvents(upcoming);
-            setPastEvents(past);
-        } catch (err) {
-            console.error('Error fetching organizer or events:', err);
-            setError('Failed to fetch events. Please try again.');
-        } finally {
-            setIsLoading(false);
+      try {
+        const orgDoc = await getDoc(doc(db, 'organizing_group', currentUser.uid));
+        if (!orgDoc.exists()) {
+          console.error(`No organizing_group document found for UID: ${currentUser.uid}`);
+          toast.error('Organizer profile not found');
+          navigate('/complete-profile');
+          return;
         }
+
+        const orgData = orgDoc.data();
+        const storedOrgName = orgData.orgName || orgData.name || '';
+        // Normalize for comparison (lowercase, replace spaces with hyphens)
+        const normalizedStoredOrgName = storedOrgName.toLowerCase().replace(/\s+/g, '-');
+        // const normalizedInputOrgName = orgName.toLowerCase().replace(/\s+/g, '-');
+
+        // if (normalizedStoredOrgName !== normalizedInputOrgName) {
+        //   console.error(`Organizer name mismatch: expected ${storedOrgName}, got ${orgName}`);
+        //   toast.error('Invalid organizer dashboard');
+        //   navigate('/404');
+        //   return;
+        // }
+
+        setOrganizer(orgData);
+      } catch (error) {
+        console.error('Error fetching organizer:', error);
+        toast.error('Failed to load dashboard');
+        navigate('/');
+      } finally {
+        setLoading(false);
+      }
     };
 
-    useEffect(() => {
-        fetchOrganizerData();
-    }, [organizerName, navigate]);
+    fetchOrganizer();
+  }, [orgName, currentUser, navigate]);
 
-    const handleDeleteEvent = async (eventId) => {
-        if (!window.confirm('Are you sure you want to delete this event? This action cannot be undone.')) {
-            return;
-        }
-
-        try {
-            // First delete all registrations for this event
-            const registrationsQuery = query(
-                collection(db, 'registrations'),
-                where('event_id', '==', eventId)
-            );
-            const registrationsSnapshot = await getDocs(registrationsQuery);
-            
-            // Delete all registrations
-            const deletePromises = registrationsSnapshot.docs.map(doc => 
-                deleteDoc(doc.ref)
-            );
-            await Promise.all(deletePromises);
-
-            // Then delete the event
-            await deleteDoc(doc(db, 'events', eventId));
-            
-            // Refresh the events list
-            await fetchOrganizerData();
-        } catch (error) {
-            console.error('Error deleting event:', error);
-            setError('Failed to delete event. Please try again.');
-        }
-    };
-
-    if (isLoading) return <div className="text-center mt-8">Loading...</div>;
-    if (error) return <div className="text-center mt-8 text-red-500">{error}</div>;
-    if (!organizer) return null;
-
+  if (loading) {
     return (
-        <div className="max-w-6xl mx-auto px-4 py-8">
-            {/* Club Info Section */}
-            <div className="bg-[#1D3557] text-white p-6 rounded-lg shadow-md">
-                <div className="flex items-center gap-4">
-                    <img
-                        src={organizer.logo_url || '/images/default-logo.png'}
-                        alt={organizer.name}
-                        className="w-16 h-16 rounded-full object-cover"
-                    />
-                    <div>
-                        <h1 className="text-2xl font-bold">{organizer.name}</h1>
-                        <p className="text-sm mt-1">Email: <span className="font-medium">{organizer.email}</span></p>
-                        <p className="mt-2 text-sm">{organizer.desc}</p>
-                    </div>
-                </div>
-            </div>
-
-            {/* Create Event Button */}
-            <div className="flex justify-end mt-6">
-                <Link
-                    to={`/${organizer.name.toLowerCase().replace(/\s+/g, '-')}/create-event`}
-                    className="bg-[#E63946] text-white px-4 py-2 rounded-md hover:bg-[#D62828] transition"
-                >
-                    + Create Event
-                </Link>
-            </div>
-
-            {/* Upcoming Events */}
-            <div className="mt-8">
-                <h2 className="text-xl font-semibold mb-4">Upcoming Events</h2>
-                <div className="flex gap-4 flex-wrap">
-                    {upcomingEvents.length > 0 ? (
-                        upcomingEvents.map(event => (
-                            <div key={event.id} className="relative">
-                                <DashboardEventCard
-                                    id={event.id}
-                                    title={event.name}
-                                    date={event.date.toDate?.().toLocaleDateString() || 'Invalid Date'}
-                                    type={event.type}
-                                    participants={event.participants}
-                                    isUpcoming={true}
-                                    venue={event.venue}
-                                    description={event.description}
-                                    organizing_group_id={event.organizing_group_id}
-                                />
-                                <div className="absolute top-2 right-2 flex gap-1">
-                                    <Link
-                                        to={`/edit-event/${event.id}`}
-                                        className="bg-blue-600 text-white px-2 py-0.5 rounded text-xs hover:bg-blue-700 transition-colors"
-                                    >
-                                        Edit
-                                    </Link>
-                                    <Link
-                                        to={`/manage-event/${event.id}`}
-                                        className="bg-green-600 text-white px-2 py-0.5 rounded text-xs hover:bg-green-700 transition-colors"
-                                    >
-                                        Manage
-                                    </Link>
-                                    <button
-                                        onClick={() => handleDeleteEvent(event.id)}
-                                        className="bg-red-600 text-white px-2 py-0.5 rounded text-xs hover:bg-red-700 transition-colors"
-                                    >
-                                        Delete
-                                    </button>
-                                </div>
-                            </div>
-                        ))
-                    ) : (
-                        <p className="text-gray-500">No upcoming events</p>
-                    )}
-                </div>
-            </div>
-
-            {/* Past Events */}
-            <div className="mt-8">
-                <h2 className="text-xl font-semibold mb-4">Past Events</h2>
-                <div className="flex gap-4 flex-wrap">
-                    {pastEvents.length > 0 ? (
-                        pastEvents.map(event => (
-                            <div key={event.id} className="relative">
-                                <DashboardEventCard
-                                    id={event.id}
-                                    title={event.name}
-                                    date={event.date.toDate?.().toLocaleDateString() || 'Invalid Date'}
-                                    type={event.type}
-                                    participants={event.participants}
-                                    isUpcoming={false}
-                                    venue={event.venue}
-                                    description={event.description}
-                                    organizing_group_id={event.organizing_group_id}
-                                />
-                                <div className="absolute top-2 right-2 flex gap-2">
-                                    <Link
-                                        to={`/manage-event/${event.id}`}
-                                        className="bg-green-600 text-white px-3 py-1 rounded text-xs hover:bg-green-700 transition-colors flex items-center gap-1 shadow-sm"
-                                    >
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                                        </svg>
-                                        Stats
-                                    </Link>
-                                    <Link
-                                        to={`/event-feedback/${event.id}`}
-                                        className="bg-purple-600 text-white px-3 py-1 rounded text-xs hover:bg-purple-700 transition-colors flex items-center gap-1 shadow-sm"
-                                    >
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
-                                        </svg>
-                                        Feedback
-                                    </Link>
-                                </div>
-                            </div>
-                        ))
-                    ) : (
-                        <p className="text-gray-500">No past events</p>
-                    )}
-                </div>
-            </div>
-        </div>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-teal-50 to-blue-100">
+        <div className="text-gray-600 text-lg animate-pulse">Loading Dashboard...</div>
+      </div>
     );
+  }
+
+  if (!organizer) return null;
+
+  return (
+    <div className="min-h-screen  py-10 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-5xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-10">
+          <h1 className="text-4xl sm:text-5xl font-extrabold text-[#1D3557] bg-clip-text bg-gradient-to-r from-[#1D3557] to-[#E63946]">
+            Welcome, {organizer.orgName || organizer.name}
+          </h1>
+          <p className="mt-2 text-lg text-gray-600">Manage your events with ease and style</p>
+        </div>
+
+        {/* Organizer Details Card */}
+        <div className="bg-white rounded-2xl shadow-lg p-8 mb-8 transform hover:scale-[1.02] transition-transform duration-300">
+          <h2 className="text-2xl font-semibold text-[#1D3557] mb-6">Organizer Profile</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div>
+              <p className="text-gray-500 font-medium">Organization Name</p>
+              <p className="text-[#1D3557] text-lg">{organizer.orgName || organizer.name}</p>
+            </div>
+            <div>
+              <p className="text-gray-500 font-medium">Email</p>
+              <p className="text-[#1D3557] text-lg">{organizer.email}</p>
+            </div>
+            <div className="col-span-1 sm:col-span-2">
+              <p className="text-gray-500 font-medium">Description</p>
+              <p className="text-[#1D3557] text-lg">{organizer.desc || 'No description'}</p>
+            </div>
+          </div>
+          <button
+            onClick={() => navigate('/complete-profile')}
+            className="mt-6 bg-gradient-to-r from-[#E63946] to-[#F63956] text-white px-6 py-2 rounded-full hover:from-[#F63956] hover:to-[#E63946] transition-all duration-300 shadow-md"
+          >
+            Update Profile
+          </button>
+        </div>
+
+        {/* Events Section */}
+        <div className="bg-white rounded-2xl shadow-lg p-8">
+          <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
+            <h2 className="text-2xl font-semibold text-[#1D3557] mb-4 sm:mb-0">Your Events</h2>
+            <button
+              onClick={() => navigate(`/${organizer.name.toLowerCase().replace(/\s+/g, '-')}/create-event`)}
+              className="bg-gradient-to-r from-[#1D3557] to-[#1D3577] text-white px-6 py-2 rounded-full hover:from-[#1D3577] hover:to-[#1D3557] transition-all duration-300 shadow-md"
+            >
+              Create New Event
+            </button>
+          </div>
+          {events.length === 0 ? (
+            <div className="text-center py-10">
+              <p className="text-gray-500 text-lg">No events created yet. Start by creating one!</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 gap-6">
+              {events.map((event) => (
+                <div
+                  key={event.id}
+                  className="bg-gray-50 rounded-xl p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center hover:bg-gray-100 transition-colors duration-200"
+                >
+                  <div className="mb-4 sm:mb-0">
+                    <h3 className="text-xl font-medium text-[#1D3557]">{event.title}</h3>
+                    <p className="text-gray-600 mt-1">{event.description || 'No description'}</p>
+                    <p className="text-gray-500 text-sm mt-2">
+                      Date: {event.date || 'Not specified'} | Participants: {event.participants || 0}
+                    </p>
+                  </div>
+                  <div className="flex gap-3">
+                    <button
+                      onClick={() => handleEditEvent(event.id)}
+                      className="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 transition-colors duration-200"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDeleteEvent(event.id)}
+                      className="bg-red-500 text-white px-4 py-2 rounded-full hover:bg-red-600 transition-colors duration-200"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default OrganizerDashboard;

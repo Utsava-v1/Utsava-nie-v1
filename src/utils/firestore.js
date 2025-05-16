@@ -41,6 +41,36 @@ export const getUserProfile = async (userId) => {
   }
 };
 
+// Organizer Profile Operations
+export const createOrganizerProfile = async (userId, orgData) => {
+  try {
+    const orgRef = doc(db, 'organizing_group', userId);
+    await setDoc(orgRef, {
+      orgName: orgData.name,
+      email: orgData.email,
+      desc: orgData.desc,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    });
+    return orgRef;
+  } catch (error) {
+    throw new Error('Error creating organizer profile: ' + error.message);
+  }
+};
+
+export const getOrganizerProfile = async (userId) => {
+  try {
+    const orgRef = doc(db, 'organizing_group', userId);
+    const orgSnap = await getDoc(orgRef);
+    if (orgSnap.exists()) {
+      return { id: orgSnap.id, ...orgSnap.data() };
+    }
+    return null;
+  } catch (error) {
+    throw new Error('Error fetching organizer profile: ' + error.message);
+  }
+};
+
 // Event Operations
 export const createEvent = async (eventData) => {
   try {
@@ -93,7 +123,7 @@ export const deleteEvent = async (eventId) => {
 export const getEventsByOrganizer = async (organizerId) => {
   try {
     const eventsRef = collection(db, 'events');
-    const q = query(eventsRef, where('organizerId', '==', organizerId));
+    const q = query(eventsRef, where('organizing_group_id', '==', organizerId));
     const querySnapshot = await getDocs(q);
     return querySnapshot.docs.map(doc => ({
       id: doc.id,
@@ -149,7 +179,7 @@ export const submitFeedback = async (eventId, studentId, feedbackData) => {
   try {
     const feedbackRef = collection(db, 'feedback');
     const docRef = await addDoc(feedbackRef, {
-      feedback_id: '',  // Optional: if you want to use Firestore auto-generated ID
+      feedback_id: '',
       student_id: studentId,
       rating: feedbackData.rating,
       comments: feedbackData.comments,
@@ -164,8 +194,6 @@ export const submitFeedback = async (eventId, studentId, feedbackData) => {
   }
 };
 
-
-
 export const getEventFeedback = async (eventId) => {
   try {
     const feedbackRef = collection(db, 'events', eventId, 'feedback');
@@ -177,4 +205,4 @@ export const getEventFeedback = async (eventId) => {
   } catch (error) {
     throw new Error('Error fetching event feedback: ' + error.message);
   }
-}; 
+};

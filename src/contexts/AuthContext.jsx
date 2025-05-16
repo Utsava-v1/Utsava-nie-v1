@@ -13,20 +13,19 @@ import { createUserProfile, getUserProfile } from '../utils/firestore';
 
 const AuthContext = createContext();
 
-// Access via: const { currentUser, userProfile } = useAuth()
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState(null);      // Firebase user
-  const [userProfile, setUserProfile] = useState(null);      // Firestore profile
+  const [currentUser, setCurrentUser] = useState(null);
+  const [userProfile, setUserProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Sign up with email and password
-  const signup = async (email, password) => {
+  // Sign up with email, password, and role
+  const signup = async (email, password, role = 'student') => {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     await createUserProfile(userCredential.user.uid, {
       email: userCredential.user.email,
-      role: 'student',
+      role,
       displayName: userCredential.user.displayName || email.split('@')[0],
       photoURL: userCredential.user.photoURL || null,
     });
@@ -87,7 +86,7 @@ export const AuthProvider = ({ children }) => {
 
   const value = {
     currentUser,
-    userProfile,  // This replaces the misleading name `currentUserDetails`
+    userProfile,
     signup,
     login,
     logout,

@@ -19,11 +19,12 @@ import EditEvent from './pages/EditEvent';
 import ManageEvent from './pages/ManageEvent';
 import EditRegistration from './pages/EditRegistration';
 import EventFeedback from './pages/EventFeedback';
+import CompleteProfile from './pages/CompleteProfile';
 
 function AppContent() {
   const { userProfile } = useAuth();
 
-  
+
   // if (loading) {
   //   return <div>Loading...</div>;  // show spinner or loading screen
   // }
@@ -97,10 +98,20 @@ function AppContent() {
               <EventFeedback />
             </PrivateRoute>
           } />
+
+          <Route
+            path="/event/:event-id/register"
+            element={
+              <PrivateRoute role="student">
+                <RegisterEvent />
+              </PrivateRoute>
+            }
+          />
+
           <Route path='*' element={<NotFound />} />
         </Route>
       </Routes>
-    </Router>
+    </Router >
   );
 }
 

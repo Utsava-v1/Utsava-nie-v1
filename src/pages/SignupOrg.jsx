@@ -3,6 +3,9 @@ import { useAuth } from '../contexts/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import { db } from '../firebase';
 import { setDoc, doc } from 'firebase/firestore';
+import { serverTimestamp } from 'firebase/firestore';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const SignupOrg = () => {
   const [formData, setFormData] = useState({
@@ -22,31 +25,47 @@ const SignupOrg = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    if (error) setError('');
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
-      return setError('Passwords do not match');
+      setError('Passwords do not match');
+      toast.error('Passwords do not match');
+      return;
     }
 
     try {
       setError('');
       setLoading(true);
 
-      await signup(formData.email, formData.password);
+      const userCredential = await signup(formData.email, formData.password);
+      const user = userCredential.user;
 
-      // Save to Firestore: using email as document ID
-      await setDoc(doc(db, 'organizing_group', formData.email), {
+      // Save to users collection
+      await setDoc(doc(db, 'users', user.uid), {
+        name: formData.name,
+        email: formData.email,
+        role: 'organizer', // Default role
+        createdAt: serverTimestamp(),
+      });
+
+      // Save to organizing_group collection using uid
+      await setDoc(doc(db, 'organizing_group', user.uid), {
         name: formData.name,
         email: formData.email,
         desc: formData.field,
+        createdAt: serverTimestamp(),
       });
 
-      navigate('/');
+      toast.success('Account created successfully');
+      navigate(`/${formData.name}/dashboard`);
     } catch (err) {
+      console.error('Signup error:', err);
       setError('Failed to create an account: ' + err.message);
+      toast.error('Failed to create an account: ' + err.message);
     } finally {
       setLoading(false);
     }
