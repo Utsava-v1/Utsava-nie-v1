@@ -30,7 +30,7 @@ const CreateEvent = () => {
       const snap = await getDocs(q);
 
       if (snap.docs.length > 0) {
-        setOrganizerRef(currentUser.email);
+        setOrganizerRef(currentUser.uid);
         setOrganizerName(currentUser.displayName);
       } else {
         setError('Organizer not found for your account.');

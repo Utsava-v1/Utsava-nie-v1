@@ -29,10 +29,10 @@ function AppContent() {
   //   return <div>Loading...</div>;  // show spinner or loading screen
   // }
 
+  console.log(userProfile);
   const currentUserUSN = userProfile?.usn || null;
   const currentUserEmail = userProfile?.email || null;
   const role = userProfile?.role || null;
-
 
 
 
@@ -100,7 +100,7 @@ function AppContent() {
           } />
 
           <Route
-            path="/event/:event-id/register"
+            path="/:event-id/register"
             element={
               <PrivateRoute role="student">
                 <RegisterEvent />

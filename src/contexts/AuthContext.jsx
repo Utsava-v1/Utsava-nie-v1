@@ -19,6 +19,7 @@ export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [userProfile, setUserProfile] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [profileLoading, setProfileLoading] = useState(true);
 
   // Sign up with email, password, and role
   const signup = async (email, password, role = 'student') => {
@@ -38,6 +39,7 @@ export const AuthProvider = ({ children }) => {
   // Logout
   const logout = async () => {
     setUserProfile(null);
+    setProfileLoading(true);
     await signOut(auth);
   };
 
@@ -65,12 +67,20 @@ export const AuthProvider = ({ children }) => {
 
   // Load Firestore user profile
   const loadUserProfile = async (user) => {
+    setProfileLoading(true);
     if (user) {
-      const profile = await getUserProfile(user.uid);
-      setUserProfile(profile);
+      try {
+        const profile = await getUserProfile(user.uid);
+        setUserProfile(profile);
+        console.log('User profile loaded:', profile);
+      } catch (error) {
+        console.error('Error loading user profile:', error.message);
+        setUserProfile(null);
+      }
     } else {
       setUserProfile(null);
     }
+    setProfileLoading(false);
   };
 
   // Listen to auth state changes
@@ -87,6 +97,7 @@ export const AuthProvider = ({ children }) => {
   const value = {
     currentUser,
     userProfile,
+    profileLoading,
     signup,
     login,
     logout,

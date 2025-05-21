@@ -11,6 +11,7 @@ import {
   where,
   addDoc,
   serverTimestamp,
+  increment,
 } from 'firebase/firestore';
 
 // User Profile Operations
@@ -171,6 +172,20 @@ export const updateRegistrationStatus = async (eventId, userId, status) => {
     });
   } catch (error) {
     throw new Error('Error updating registration status: ' + error.message);
+  }
+};
+
+export const unregisterFromEvent = async (eventId, userId) => {
+  try {
+    const registrationRef = doc(db, 'events', eventId, 'registrations', userId);
+    const eventRef = doc(db, 'events', eventId);
+    await Promise.all([
+      deleteDoc(registrationRef),
+      updateDoc(eventRef, { participants: increment(-1) }),
+    ]);
+    return { success: true, message: 'Successfully unregistered from event.' };
+  } catch (error) {
+    throw new Error('Error unregistering from event: ' + error.message);
   }
 };
 

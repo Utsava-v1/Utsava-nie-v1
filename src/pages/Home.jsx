@@ -7,8 +7,10 @@ import { db } from '../firebase';
 import { ClipLoader } from 'react-spinners';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useAuth } from '../contexts/AuthContext';
 
 function Home() {
+  const { currentUser } = useAuth();
   const [events, setEvents] = useState([]);
   const [filteredEvents, setFilteredEvents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -24,10 +26,6 @@ function Home() {
       const eventsData = await Promise.all(
         querySnapshot.docs.map(async (docSnap) => {
           const data = docSnap.data();
-          console.log(data);
-          
-
-          // Handle date (Timestamp, Date, or string)
           let eventDate = 'Unknown Date';
           let rawDate = null;
           try {
@@ -60,7 +58,6 @@ function Home() {
             console.warn(`Error parsing date for event ${docSnap.id}:`, err);
           }
 
-          // Handle time (string)
           let eventTime = 'Unknown Time';
           try {
             if (data.time && typeof data.time === 'string') {
@@ -74,19 +71,21 @@ function Home() {
             console.warn(`Error parsing time for event ${docSnap.id}:`, err);
           }
 
-          // Validate event type
-          const validTypes = ['Workshop', 'Seminar', 'Fest', 'Club Event', 'Competition'];
+          const validTypes = ['Workshop', 'Seminar', 'Fest', "Club Event", 'Competition'];
           const eventType = validTypes.includes(data.type) ? data.type : 'General';
 
-          // Fetch organizer name
           let organizerName = 'Unknown Organizer';
           let orgId = null;
           if (data.organizing_group_id && typeof data.organizing_group_id === 'string') {
             try {
               const orgDoc = await getDoc(doc(db, 'organizing_group', data.organizing_group_id));
               if (orgDoc.exists()) {
-                organizerName = orgDoc.data().orgName || 'Unknown Organizer';
+                organizerName = orgDoc.data().name || 'Unknown Organizer';
                 orgId = data.organizing_group_id;
+                console.log(`Fetched organizer for event ${docSnap.id}:`, {
+                  orgId: data.organizing_group_id,
+                  name: orgDoc.data().name,
+                });
               } else {
                 console.warn(`Organizer document not found for ID: ${data.organizing_group_id}`);
               }
@@ -97,7 +96,7 @@ function Home() {
 
           return {
             id: docSnap.id,
-            name: data.name || 'Untitled Event',
+            name: data.name || data.eventName || 'Untitled Event',
             rawDate,
             formattedDate: eventDate,
             time: eventTime,
@@ -107,11 +106,11 @@ function Home() {
             organizer: organizerName,
             organizing_group_id: orgId,
             image: data.imageUrl || '/images/hotAirBalloons.jpg',
+            registrations: typeof data.registrations === 'number' ? data.registrations : 0,
           };
         })
       );
 
-      // Filter upcoming events and sort by date
       const now = new Date();
       const upcomingEvents = eventsData
         .filter((event) => {
@@ -141,31 +140,27 @@ function Home() {
   }, []);
 
   useEffect(() => {
-    // Apply filters and search
     let result = [...events];
 
-    // Search by event name
     if (searchName.trim()) {
       result = result.filter((event) =>
         event.name.toLowerCase().includes(searchName.toLowerCase())
       );
     }
 
-    // Search by organizer name
     if (searchOrganizer.trim()) {
       result = result.filter((event) =>
         event.organizer.toLowerCase().includes(searchOrganizer.toLowerCase())
       );
     }
 
-    // Filter by date
     if (filterDate) {
       const selectedDate = new Date(filterDate);
-      selectedDate.setHours(0, 0, 0, 0); // Normalize to start of day
+      selectedDate.setHours(0, 0, 0, 0);
       result = result.filter((event) => {
         if (!event.rawDate) return false;
         const eventDate = new Date(event.rawDate);
-        eventDate.setHours(0, 0, 0, 0); // Normalize to start of day
+        eventDate.setHours(0, 0, 0, 0);
         return eventDate.getTime() === selectedDate.getTime();
       });
     }
@@ -180,16 +175,25 @@ function Home() {
     setFilteredEvents(events);
   };
 
-  return (
-    <div>
-      <Hero />
-      <section className=" py-7 text-center relative">
-        <div className='bg-white !p-3'>
+  const handleRegisterClick = (eventId) => {
+    if (!currentUser) {
+      console.log('Register attempted without login, redirecting to /login');
+      toast.error('Please log in to register for events.');
+      navigate('/login');
+      return;
+    }
+    console.log('Navigating to register:', { eventId, userId: currentUser.uid });
+    navigate(`/${eventId}/register`);
+  };
 
+  return (
+    <div className='relative'>
+      <Hero />
+      <section className="py-7 text-center relative">
+        <div className='bg-white !p-3'>
           <h2 className="text-3xl font-bold text-[#1D3557] mb-6">Upcoming Events</h2>
 
-          {/* Filters and Search */}
-          <div className=" max-w-4xl mx-auto mb-6 flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <div className="max-w-4xl mx-auto mb-6 flex flex-col sm:flex-row gap-4 justify-center items-center">
             <input
               type="text"
               placeholder="Search by event name"
@@ -217,42 +221,62 @@ function Home() {
               Reset
             </button>
           </div>
-
         </div>
-        {/* Popup */}
+
+        {/* Modal Popup */}
         {selectedEvent && (
-          <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50 flex justify-center items-center">
-            <div className="bg-white p-6 rounded-md w-[80%] max-w-[700px] relative">
+          <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center backdrop-blur-sm transition-all duration-300">
+            <div className="relative bg-white rounded-xl shadow-2xl max-w-2xl w-full p-6 mx-4 animate-fadeIn">
+              {/* Close Button */}
               <button
-                className="absolute top-2 right-4 text-xl font-bold text-gray-700 hover:text-red-500"
                 onClick={() => setSelectedEvent(null)}
+                className="absolute top-3 right-3 text-gray-500 hover:text-red-500 text-xl font-semibold"
+                aria-label="Close modal"
               >
                 ×
               </button>
-              <h2 className="text-2xl font-bold mb-2">{selectedEvent.name}</h2>
-              <p className="text-gray-600 mb-1">
-                <strong>Organizer:</strong> {selectedEvent.organizer}
-              </p>
-              <p className="text-gray-600 mb-1">
-                <strong>Date:</strong> {selectedEvent.formattedDate}
-              </p>
-              <p className="text-gray-600 mb-1">
-                <strong>Time:</strong> {selectedEvent.time}
-              </p>
-              <p className="text-gray-600 mb-1">
-                <strong>Venue:</strong> {selectedEvent.venue}
-              </p>
-              <p className="text-gray-600 mb-1">
-                <strong>Type:</strong> {selectedEvent.type}
-              </p>
-              <p className="text-gray-600 mb-3">
-                <strong>Description:</strong> {selectedEvent.description}
-              </p>
+
+              {/* Event Image */}
               <img
                 src={selectedEvent.image}
-                alt="Event Poster"
-                className="w-full h-64 object-cover rounded"
+                alt="Event"
+                className="w-full h-48 object-cover rounded-lg mb-4"
               />
+
+              {/* Event Title */}
+              <h2 className="text-2xl font-bold text-[#1D3557] mb-2">
+                {selectedEvent.name}
+              </h2>
+
+              {/* Event Details */}
+              <div className="space-y-1 text-left text-sm sm:text-base text-gray-700">
+                <p><strong>📅 Date:</strong> {selectedEvent.date}</p>
+                <p><strong>🕒 Time:</strong> {selectedEvent.time}</p>
+                <p><strong>📍 Venue:</strong> {selectedEvent.venue}</p>
+                <p><strong>🧑‍💼 Organizer:</strong> {selectedEvent.organizer}</p>
+                <p><strong>🏷️ Type:</strong> {selectedEvent.type}</p>
+                <p><strong>👥 Registrations:</strong> {selectedEvent.registrations}</p>
+                <p className="mt-2"><strong>📝 Description:</strong> {selectedEvent.description}</p>
+              </div>
+
+              {/* Optional Actions */}
+              <div className="mt-5 flex justify-end gap-3">
+                <button
+                  onClick={() => setSelectedEvent(null)}
+                  className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-md text-sm text-gray-800 transition"
+                >
+                  Close
+                </button>
+                <button
+                  onClick={() => {
+                    handleRegisterClick(selectedEvent.id);
+                    setTimeout(() => setSelectedEvent(null), 100);
+                  }}
+                  className="px-4 py-2 bg-[#1D3557] hover:bg-[#E63946] text-white rounded-md text-sm transition"
+                >
+                  Register
+                </button>
+              </div>
             </div>
           </div>
         )}
@@ -269,18 +293,10 @@ function Home() {
             filteredEvents.map((event) => (
               <EventCard
                 key={event.id}
-                id={event.id}
-                name={event.name}
-                organizer={event.organizer}
+                {...event}
                 date={event.formattedDate}
-                time={event.time}
-                venue={event.venue}
-                description={event.description}
-                type={event.type}
-                image={event.image}
-                organizing_group_id={event.organizing_group_id}
-                onDetailsClick={() => setSelectedEvent(event)}
-                onRegisterClick={() => navigate(`/${event.id}/register`)}
+                onDetailsClick={(eventData) => setSelectedEvent(eventData)}
+                onRegisterClick={() => handleRegisterClick(event.id)}
               />
             ))
           )}

@@ -47,7 +47,7 @@ const Feedback = ({ currentUserUSN, currentUserEmail, eventId }) => {
             <div className="bg-white w-auto p-5 rounded-lg shadow-xl container flex flex-col justify-center items-center">
                 <h1 className="text-[#1D3557] text-4xl font-bold mb-5 max-md:text-2xl max-md:mb-2">📝Feedback</h1>
                 <p className="text-[#2F3E46] text-lg mb-5 w-[70%] max-md:text-sm">
-                    We value your feedback! Please share your thoughts to help us improve.🙏
+                    We value your feedback🙏! Share your thoughts to help us improve.
                 </p>
 
                 <form onSubmit={handleSubmit} className="max-w-full pb-5 min-w-[70%]">
