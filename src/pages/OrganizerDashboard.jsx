@@ -78,20 +78,25 @@ const OrganizerDashboard = () => {
         </div>
 
         {/* Organizer Details Card */}
-        <div className="bg-white rounded-2xl shadow-lg p-8 mb-8 transform hover:scale-[1.02] transition-transform duration-300">
-          <h2 className="text-2xl font-semibold text-[#1D3557] mb-6">Organizer Profile</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <div>
-              <p className="text-gray-500 font-medium">Organization Name</p>
-              <p className="text-[#1D3557] text-lg">{organizer.orgName || organizer.name}</p>
-            </div>
-            <div>
-              <p className="text-gray-500 font-medium">Email</p>
-              <p className="text-[#1D3557] text-lg">{organizer.email}</p>
-            </div>
-            <div className="col-span-1 sm:col-span-2">
-              <p className="text-gray-500 font-medium">Description</p>
-              <p className="text-[#1D3557] text-lg">{organizer.desc || 'No description'}</p>
+        <div className="bg-[#1D3557] text-white rounded-2xl shadow-lg p-8 mb-8 transform hover:scale-[1.01] transition-transform duration-300">
+          <h2 className="text-2xl font-semibold mb-6">Organizer Profile</h2>
+          <div className='pl-10 flex self-center justify-start gap-20'>
+            <div className='h-30 w-30 border rounded-full bg-[url("/images/orgProfile.jpg")] bg-cover bg-center'></div>
+            
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
+              <div>
+                <p className="text-gray-300 font-medium">Organization Name</p>
+                <p className="text-lg">{organizer.orgName || organizer.name}</p>
+              </div>
+              <div>
+                <p className="text-gray-300 font-medium">Email</p>
+                <p className="text text-lg">{organizer.email}</p>
+              </div>
+              <div className="col-span-1 sm:col-span-2">
+                <p className="text-gray-300 font-medium">Description</p>
+                <p className="text text-lg">{organizer.desc || 'No description'}</p>
+              </div>
             </div>
           </div>
           <button

@@ -22,6 +22,16 @@ function Home() {
 
   const fetchEvents = async () => {
     try {
+
+      const fallbackImages = [
+        '/images/hotAirBalloons.jpg',
+        'https://www.monginisbakery.com/website/assets/images/events/1.jpg',
+        'https://theperfectevent.com/wp-content/uploads/2020/01/Main-Scroll-2.jpg',
+        'https://marketing-cdn.tickettailor.com/ZgP1j7LRO5ile62O_HowdoyouhostasmallcommunityeventA10-stepguide%2CMiniflagsattheevent.jpg?auto=format,compress',
+        "https://d194ip2226q57d.cloudfront.net/images/Event-Guide_Header_CO-Shutterstock.original.jpg",
+        "https://static.vecteezy.com/system/resources/thumbnails/024/676/211/small/event-light-andgrade-concept-christmas-wreath-bokeh-lights-over-dim-blue-establishment-creative-resource-ai-generated-photo.jpeg"
+      ];
+
       const querySnapshot = await getDocs(collection(db, 'events'));
       const eventsData = await Promise.all(
         querySnapshot.docs.map(async (docSnap) => {
@@ -74,13 +84,14 @@ function Home() {
           const validTypes = ['Workshop', 'Seminar', 'Fest', "Club Event", 'Competition'];
           const eventType = validTypes.includes(data.type) ? data.type : 'General';
 
-          let organizerName = 'Unknown Organizer';
+          let organizerName = '';
           let orgId = null;
           if (data.organizing_group_id && typeof data.organizing_group_id === 'string') {
             try {
               const orgDoc = await getDoc(doc(db, 'organizing_group', data.organizing_group_id));
               if (orgDoc.exists()) {
-                organizerName = orgDoc.data().name || 'Unknown Organizer';
+                console.log(orgDoc.data());
+                organizerName = orgDoc.data().name || orgDoc.data().orgName || 'Organizer'; // Unknown Organizer
                 orgId = data.organizing_group_id;
                 console.log(`Fetched organizer for event ${docSnap.id}:`, {
                   orgId: data.organizing_group_id,
@@ -105,7 +116,7 @@ function Home() {
             type: eventType,
             organizer: organizerName,
             organizing_group_id: orgId,
-            image: data.imageUrl || '/images/hotAirBalloons.jpg',
+            image: data.imageUrl || fallbackImages[Math.floor(Math.random() * fallbackImages.length)],
             registrations: typeof data.registrations === 'number' ? data.registrations : 0,
           };
         })
@@ -189,9 +200,9 @@ function Home() {
   return (
     <div className='relative'>
       <Hero />
-      <section className="py-7 text-center relative">
-        <div className='bg-white !p-3'>
-          <h2 className="text-3xl font-bold text-[#1D3557] mb-6">Upcoming Events</h2>
+      <section className="text-center relative">
+        <div className='bg-[url("/images/randombg.jpeg")] backdrop-blur-sm !p-3'>
+          <h2 className="text-3xl font-bold text-white mb-6">Upcoming Events</h2>
 
           <div className="max-w-4xl mx-auto mb-6 flex flex-col sm:flex-row gap-4 justify-center items-center">
             <input
@@ -199,20 +210,20 @@ function Home() {
               placeholder="Search by event name"
               value={searchName}
               onChange={(e) => setSearchName(e.target.value)}
-              className="w-full sm:w-1/3 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#1D3557] focus:outline-none"
+              className="bg-white w-full sm:w-1/3 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#1D3557] focus:outline-none"
             />
             <input
               type="text"
               placeholder="Search by organizer"
               value={searchOrganizer}
               onChange={(e) => setSearchOrganizer(e.target.value)}
-              className="w-full sm:w-1/3 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#1D3557] focus:outline-none"
+              className="bg-white w-full sm:w-1/3 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#1D3557] focus:outline-none"
             />
             <input
               type="date"
               value={filterDate}
               onChange={(e) => setFilterDate(e.target.value)}
-              className="w-full sm:w-1/4 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#1D3557] focus:outline-none"
+              className="bg-white w-full sm:w-1/4 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#1D3557] focus:outline-none"
             />
             <button
               onClick={handleResetFilters}

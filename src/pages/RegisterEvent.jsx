@@ -41,7 +41,7 @@ function RegisterEvent() {
     }
 
     if (!userProfile || userProfile.role !== 'student') {
-      console.log('User is not a student or profile missing, redirecting to /:', { userProfile });
+      alert('Only Students are allowed to regiseter!');
       toast.error('Only students can register for events 🚫');
       navigate('/');
       return;

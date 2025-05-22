@@ -22,8 +22,8 @@ const EventCard = ({
   const orgNav = organizer?.toLowerCase().replace(/\s+/g, '-') || 'unknown';
 
   return (
-    <div className="event-card bg-white rounded-lg min-w-80 shadow-lg transition-transform transform hover:translate-y-[-5px] hover:shadow-xl w-[calc(33.333%-20px)]">
-      <img src={imgSrc} alt="Event Image" className="w-full object-cover rounded-t-lg h-48" />
+    <div className="event-card bg-white rounded-lg min-w-80 shadow-sm shadow-black/50 transition-transform transform hover:translate-y-[-5px] hover:shadow-xl w-[calc(33.333%-20px)]">
+      <img src={imgSrc} alt="Event Image" className="w-full p-2 brightness-80 object-cover rounded-t-lg h-48" />
       <div className="event-card-body p-5 text-left">
         <div className="flex justify-between items-start mb-2">
           <h3 className="text-[#1D3557] text-2xl mb-2 h-10 w-full overflow-hidden">{eventName}</h3>

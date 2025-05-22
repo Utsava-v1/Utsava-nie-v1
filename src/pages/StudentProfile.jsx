@@ -153,12 +153,16 @@ const StudentProfile = () => {
   return (
     <div className="max-w-5xl mx-auto p-6">
       {/* Profile Info */}
-      <div className="bg-[#1D3557] text-white p-5 rounded-md shadow-md mb-8">
-        <h2 className="text-2xl font-bold mb-2">{student.displayName}</h2>
-        <p>Email: {student.email}</p>
-        <p>USN: {student.usn}</p>
-        <p>Semester: {student.semester || 'N/A'}</p>
-        <p>Contact: {student.contact_no || 'N/A'}</p>
+      <div className="bg-[#1D3557] text-white flex items-center justify-start gap-10 p-10 rounded-md shadow-md mb-8">
+        <div className='h-30 w-30 border rounded-full bg-[url("/images/studentProfile.jpeg")] bg-cover bg-center'></div>
+        <div>
+
+          <h2 className="text-2xl font-bold mb-2">{student.displayName}</h2>
+          <p>Email: {student.email}</p>
+          <p>USN: {student.usn}</p>
+          <p>Semester: {student.semester || 'N/A'}</p>
+          <p>Contact: {student.contact_no || 'N/A'}</p>
+        </div>
       </div>
 
       {/* Upcoming Events */}
