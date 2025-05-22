@@ -24,94 +24,72 @@ import CompleteProfile from './pages/CompleteProfile';
 function AppContent() {
   const { userProfile } = useAuth();
 
-
-  // if (loading) {
-  //   return <div>Loading...</div>;  // show spinner or loading screen
-  // }
-
   console.log(userProfile);
   const currentUserUSN = userProfile?.usn || null;
   const currentUserEmail = userProfile?.email || null;
   const role = userProfile?.role || null;
 
-
-
   return (
     <Router>
       <Routes>
         <Route element={<Layout />}>
-          <Route path='/' element={
+          <Route path="/" element={
             <PrivateRoute currentUserUSN={currentUserUSN} currentUserEmail={currentUserEmail} role={role}>
               <Home />
             </PrivateRoute>
           } />
-          <Route path='/about' element={<About />} />
-          <Route path='/feedback' element={
+          <Route path="/about" element={<About />} />
+          <Route path="/feedback" element={
             <PrivateRoute currentUserUSN={currentUserUSN} currentUserEmail={currentUserEmail} role={role}>
               <Feedback currentUserUSN={currentUserUSN} currentUserEmail={currentUserEmail} role={role} eventId={'platform'} />
             </PrivateRoute>
           } />
-          <Route path='/terms' element={<TnC />} />
-          <Route path='/developers' element={<Developers />} />
-          <Route path='/login' element={<Login />} />
-          <Route path='/student-signup' element={<SignUp />} />
-          <Route path='/:student/profile' element={
+          <Route path="/terms" element={<TnC />} />
+          <Route path="/developers" element={<Developers />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/student-signup" element={<SignUp />} />
+          <Route path="/:student/profile" element={
             <PrivateRoute currentUserUSN={currentUserUSN} currentUserEmail={currentUserEmail} role={role}>
               <StudentProfile />
             </PrivateRoute>
           } />
-          <Route path='/:event_id/register' element={
+          <Route path="/:eventId/register" element={
             <PrivateRoute currentUserUSN={currentUserUSN} currentUserEmail={currentUserEmail} role={role}>
               <RegisterEvent />
             </PrivateRoute>
           } />
-
-          <Route path='/organizer-signup' element={<SignupOrg />} />
-          <Route path='/:organizerName/create-event' element={
+          <Route path="/organizer-signup" element={<SignupOrg />} />
+          <Route path="/:organizerName/create-event" element={
             <PrivateRoute currentUserUSN={currentUserUSN} currentUserEmail={currentUserEmail} role={role}>
               <CreateEvent />
             </PrivateRoute>
           } />
-          <Route path='/edit-event/:eventId' element={
+          <Route path="/edit-event/:eventId" element={
             <PrivateRoute currentUserUSN={currentUserUSN} currentUserEmail={currentUserEmail} role={role}>
               <EditEvent />
             </PrivateRoute>
           } />
-          <Route path='/manage-event/:eventId' element={
+          <Route path="/manage-event/:eventId" element={
             <PrivateRoute currentUserUSN={currentUserUSN} currentUserEmail={currentUserEmail} role={role}>
               <ManageEvent />
             </PrivateRoute>
           } />
-          <Route path='/:organizerName/dashboard' element={
-            <PrivateRoute currentUserUSN={currentUserUSN} currentUserEmail={currentUserEmail} role={role}>
-              <OrganizerDashboard />
-            </PrivateRoute>
-          } />
-          <Route path='/:organizerName' element={<Navigate to="/" />} />
-          <Route path='/edit-registration/:registrationId' element={
+          <Route path="/:organizerId/dashboard" element={<OrganizerDashboard />} />
+          <Route path="/:organizerName" element={<Navigate to="/" />} />
+          <Route path="/edit-registration/:registrationId" element={
             <PrivateRoute>
               <EditRegistration />
             </PrivateRoute>
           } />
-          <Route path='/event-feedback/:eventId' element={
+          <Route path="/event-feedback/:eventId" element={
             <PrivateRoute currentUserUSN={currentUserUSN} currentUserEmail={currentUserEmail} role={role}>
               <EventFeedback />
             </PrivateRoute>
           } />
-
-          <Route
-            path="/:event-id/register"
-            element={
-              <PrivateRoute role="student">
-                <RegisterEvent />
-              </PrivateRoute>
-            }
-          />
-
-          <Route path='*' element={<NotFound />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
-    </Router >
+    </Router>
   );
 }
 

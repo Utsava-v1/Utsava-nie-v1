@@ -10,7 +10,7 @@ const NavBar = () => {
   const [showUserDetails, setShowUserDetails] = useState(false);
   const [role, setRole] = useState(null);
   const [organizerName, setOrganizerName] = useState('');
-  const [studentUsn, setStudentUsn] = useState('');
+  const [studentUsn, setStudentUsn] = useState('0000');
   const [loadingRole, setLoadingRole] = useState(true);
   const navigate = useNavigate();
 
@@ -42,7 +42,7 @@ const NavBar = () => {
         navigate('/complete-profile');
         return;
       }
-      navigate(`/${organizerName.toLowerCase().replace(/\s+/g, '-')}/dashboard`);
+      navigate(`/${currentUser.uid}/dashboard`);
     } else {
       console.warn('Role not recognized:', role);
       toast.error('Role not recognized. Please contact support.');
@@ -75,7 +75,7 @@ const NavBar = () => {
             if (!userData.usn) {
               console.warn('Missing USN for student:', currentUser.uid);
             }
-            setStudentUsn(userData.usn || '');
+            setStudentUsn(userData.usn || 'student');
           } else if (userData.role === 'organizer') {
             const orgDoc = await getDoc(doc(db, 'organizing_group', currentUser.uid));
             if (orgDoc.exists()) {
@@ -149,8 +149,8 @@ const NavBar = () => {
               title={loadingRole ? 'Loading role...' : 'Go to dashboard'}
             >
               {showUserDetails
-                ? currentUser.displayName || currentUser.email
-                : `${(currentUser.displayName || currentUser.email).slice(0, 7)}...`}
+                ? currentUser.name || currentUser.orgName || currentUser.email
+                : `${(currentUser.orgName || currentUser.name || currentUser.email).slice(0, 7)}...`}
             </span>
 
             <button

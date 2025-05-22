@@ -79,8 +79,6 @@ const EditEvent = () => {
 
             await updateDoc(eventRef, updateData);
             setSuccess('Event updated successfully!');
-            
-            // Navigate back to dashboard after 2 seconds
             setTimeout(() => {
                 navigate(-1);
             }, 2000);
@@ -90,130 +88,90 @@ const EditEvent = () => {
         }
     };
 
-    if (loading) return <div className="text-center mt-8">Loading...</div>;
-    if (error) return <div className="text-center mt-8 text-red-500">{error}</div>;
+    if (loading) return (
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-teal-50 to-blue-100">
+            <div className="text-gray-600 text-lg animate-pulse">Loading Event... ⏳</div>
+        </div>
+    );
+
+    if (error) return (
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-teal-50 to-blue-100">
+            <div className="text-red-600 text-lg">{error}</div>
+        </div>
+    );
 
     return (
-        <div className="max-w-xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-lg">
-            <h2 className="text-3xl font-semibold mb-4 text-[#1D3557]">Edit Event</h2>
-            
-            <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Event Name</label>
-                    <input
-                        type="text"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        className="w-full p-2 border rounded focus:ring-2 focus:ring-[#1D3557] focus:border-transparent"
-                        required
-                    />
-                </div>
+        <div className="min-h-screen bg-gradient-to-br from-teal-50 to-blue-100 py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
+            <div className="max-w-xl w-full bg-white rounded-2xl shadow-xl p-8 transform hover:scale-[1.02] transition-transform duration-300">
+                <h2 className="text-3xl font-extrabold text-[#1D3557] mb-6 text-center">Edit Event ✏️</h2>
 
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
-                    <input
-                        type="date"
-                        name="date"
-                        value={formData.date}
-                        onChange={handleChange}
-                        className="w-full p-2 border rounded focus:ring-2 focus:ring-[#1D3557] focus:border-transparent"
-                        required
-                    />
-                </div>
+                <form onSubmit={handleSubmit} className="space-y-6">
+                    {[
+                        { label: 'Event Name', name: 'name', type: 'text' },
+                        { label: 'Date', name: 'date', type: 'date' },
+                        { label: 'Time', name: 'time', type: 'time' },
+                        { label: 'Venue', name: 'venue', type: 'text' },
+                        { label: 'Event Type', name: 'type', type: 'text' },
+                        { label: 'Max Participants', name: 'participants', type: 'number' },
+                    ].map(({ label, name, type }) => (
+                        <div key={name}>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+                            <input
+                                type={type}
+                                name={name}
+                                value={formData[name]}
+                                onChange={handleChange}
+                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1D3557] focus:border-transparent transition"
+                                required
+                            />
+                        </div>
+                    ))}
 
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Time</label>
-                    <input
-                        type="time"
-                        name="time"
-                        value={formData.time}
-                        onChange={handleChange}
-                        className="w-full p-2 border rounded focus:ring-2 focus:ring-[#1D3557] focus:border-transparent"
-                        required
-                    />
-                </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                        <textarea
+                            name="description"
+                            value={formData.description}
+                            onChange={handleChange}
+                            rows="3"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1D3557] focus:border-transparent transition"
+                            required
+                        />
+                    </div>
 
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Venue</label>
-                    <input
-                        type="text"
-                        name="venue"
-                        value={formData.venue}
-                        onChange={handleChange}
-                        className="w-full p-2 border rounded focus:ring-2 focus:ring-[#1D3557] focus:border-transparent"
-                        required
-                    />
-                </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Event Image</label>
+                        <input
+                            type="file"
+                            name="image"
+                            onChange={handleChange}
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1D3557] focus:border-transparent transition"
+                            accept="image/*"
+                        />
+                    </div>
 
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                    <textarea
-                        name="description"
-                        value={formData.description}
-                        onChange={handleChange}
-                        rows="3"
-                        className="w-full p-2 border rounded focus:ring-2 focus:ring-[#1D3557] focus:border-transparent"
-                        required
-                    />
-                </div>
+                    {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+                    {success && <p className="text-green-600 text-sm text-center">{success}</p>}
 
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Event Type</label>
-                    <input
-                        type="text"
-                        name="type"
-                        value={formData.type}
-                        onChange={handleChange}
-                        className="w-full p-2 border rounded focus:ring-2 focus:ring-[#1D3557] focus:border-transparent"
-                        required
-                    />
-                </div>
-
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Max Participants</label>
-                    <input
-                        type="number"
-                        name="participants"
-                        value={formData.participants}
-                        onChange={handleChange}
-                        className="w-full p-2 border rounded focus:ring-2 focus:ring-[#1D3557] focus:border-transparent"
-                        required
-                    />
-                </div>
-
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Event Image</label>
-                    <input
-                        type="file"
-                        name="image"
-                        onChange={handleChange}
-                        className="w-full p-2 border rounded focus:ring-2 focus:ring-[#1D3557] focus:border-transparent"
-                        accept="image/*"
-                    />
-                </div>
-
-                {error && <p className="text-red-500">{error}</p>}
-                {success && <p className="text-green-500">{success}</p>}
-
-                <div className="flex gap-4">
-                    <button
-                        type="submit"
-                        className="flex-1 bg-[#1D3557] text-white py-2 rounded hover:bg-[#457B9D] transition"
-                    >
-                        Update Event
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => navigate(-1)}
-                        className="flex-1 bg-gray-500 text-white py-2 rounded hover:bg-gray-600 transition"
-                    >
-                        Cancel
-                    </button>
-                </div>
-            </form>
+                    <div className="flex gap-4">
+                        <button
+                            type="submit"
+                            className="flex-1 bg-gradient-to-r from-[#1D3557] to-[#457B9D] text-white py-2 rounded-full hover:opacity-90 transition-all shadow-md"
+                        >
+                            Update Event
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => navigate(-1)}
+                            className="flex-1 bg-gray-400 text-white py-2 rounded-full hover:bg-gray-500 transition-all shadow-md"
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 };
 
-export default EditEvent; 
+export default EditEvent;

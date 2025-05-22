@@ -135,15 +135,32 @@ export const getEventsByOrganizer = async (organizerId) => {
   }
 };
 
-// Registration Operations
-export const registerForEvent = async (eventId, userId, registrationData) => {
+// Fetch events by an array of event IDs
+export const getEventsByIds = async (eventIds) => {
   try {
-    const registrationRef = collection(db, 'events', eventId, 'registrations');
-    await setDoc(doc(registrationRef, userId), {
+    const events = [];
+    for (const eventId of eventIds) {
+      const eventDoc = await getDoc(doc(db, 'events', eventId));
+      if (eventDoc.exists()) {
+        events.push({ id: eventDoc.id, ...eventDoc.data() });
+      }
+    }
+    return events;
+  } catch (error) {
+    throw new Error('Error fetching events by IDs: ' + error.message);
+  }
+};
+
+// Registration Operations
+export const registerForEvent = async (eventId, usn, registrationData) => {
+  try {
+    const registrationId = `${eventId}_${usn}`;
+    const registrationRef = doc(db, 'registrations', registrationId);
+    await setDoc(registrationRef, {
       ...registrationData,
-      userId,
-      status: 'pending',
-      registeredAt: serverTimestamp(),
+      event_id: eventId,
+      registration_id: registrationId,
+      timestamp: serverTimestamp(),
     });
   } catch (error) {
     throw new Error('Error registering for event: ' + error.message);
@@ -152,8 +169,9 @@ export const registerForEvent = async (eventId, userId, registrationData) => {
 
 export const getEventRegistrations = async (eventId) => {
   try {
-    const registrationsRef = collection(db, 'events', eventId, 'registrations');
-    const querySnapshot = await getDocs(registrationsRef);
+    const registrationsRef = collection(db, 'registrations');
+    const q = query(registrationsRef, where('event_id', '==', eventId));
+    const querySnapshot = await getDocs(q);
     return querySnapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data()
@@ -175,13 +193,14 @@ export const updateRegistrationStatus = async (eventId, userId, status) => {
   }
 };
 
-export const unregisterFromEvent = async (eventId, userId) => {
+export const unregisterFromEvent = async (eventId, usn) => {
   try {
-    const registrationRef = doc(db, 'events', eventId, 'registrations', userId);
+    const registrationId = `${eventId}_${usn}`;
+    const registrationRef = doc(db, 'registrations', registrationId);
     const eventRef = doc(db, 'events', eventId);
     await Promise.all([
       deleteDoc(registrationRef),
-      updateDoc(eventRef, { participants: increment(-1) }),
+      updateDoc(eventRef, { registrations: increment(-1) }),
     ]);
     return { success: true, message: 'Successfully unregistered from event.' };
   } catch (error) {
@@ -200,7 +219,6 @@ export const submitFeedback = async (eventId, studentId, feedbackData) => {
       comments: feedbackData.comments,
       date: serverTimestamp(),
     });
-
     console.log('Feedback successfully submitted to Firestore with doc ID: ', docRef.id);
     return docRef.id;
   } catch (error) {

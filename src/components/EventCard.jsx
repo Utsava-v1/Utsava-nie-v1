@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const EventCard = ({
   id,
@@ -16,10 +16,19 @@ const EventCard = ({
   onDetailsClick,
   onRegisterClick,
 }) => {
+  const navigate = useNavigate();
   const defaultImage = '/images/hotAirBalloons.jpg';
   const imgSrc = image || defaultImage;
   const eventName = name || '-no event name-';
-  const orgNav = organizer?.toLowerCase().replace(/\s+/g, '-') || 'unknown';
+  const orgNav = organizing_group_id || 'unknown';
+
+  const handleOrganizerClick = () => {
+    console.log('Organizer link clicked:', { id, organizing_group_id, orgNav });
+    if (orgNav === 'unknown') {
+      console.warn('Invalid organizing_group_id, redirecting to /');
+      navigate('/');
+    }
+  };
 
   return (
     <div className="event-card bg-white rounded-lg min-w-80 shadow-sm shadow-black/50 transition-transform transform hover:translate-y-[-5px] hover:shadow-xl w-[calc(33.333%-20px)]">
@@ -28,11 +37,15 @@ const EventCard = ({
         <div className="flex justify-between items-start mb-2">
           <h3 className="text-[#1D3557] text-2xl mb-2 h-10 w-full overflow-hidden">{eventName}</h3>
           <span className="text-sm text-gray-600 text-center bg-gray-200 !p-2 rounded-full">
-            {registrations ?? 0} regis...
+            {registrations ?? 0} regis..
           </span>
         </div>
-        <Link to={`/${orgNav}/dashboard`} className="organizer text-[#00a8ad] text-lg mb-2 hover:underline">
-          By {organizer || 'Unknown Organizer'}
+        <Link
+          to={orgNav === 'unknown' ? '/' : `/${orgNav}/dashboard`}
+          onClick={handleOrganizerClick}
+          className="organizer text-[#00a8ad] text-lg mb-2 hover:underline"
+        >
+          By {organizer || 'Organizer'}
         </Link>
         <div className="date-time text-[#2F3E46] text-lg mb-5">Date: {date} | Time: {time}</div>
         <div className="flex flex-wrap gap-2">
