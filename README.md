@@ -1,6 +1,6 @@
 # Utsav - Event Management System 🎉
 
-![Utsav Banner](./public/images/logo.jpg)
+![Utsav Banner](./public/images/utsavbanner.jpg)
 
 **UTSAV** is a modern, full-stack web application designed to streamline the planning, management, and participation of events in academic institutions and beyond. Built with React, Firebase, and Tailwind CSS, UTSAV provides a centralized platform for organizers and participants to engage seamlessly in events of all scales.
 
